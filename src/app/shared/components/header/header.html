@@ -12,9 +12,15 @@
       </span>
     </a>
 
-    <form class="busca" role="search">
+    <form class="busca" role="search" (submit)="buscar($event, campoBusca.value)">
       <label for="busca" class="visually-hidden">Buscar produtos</label>
-      <input id="busca" type="search" placeholder="O que você está procurando?" />
+      <input
+        #campoBusca
+        id="busca"
+        type="search"
+        name="busca"
+        placeholder="O que você está procurando?"
+      />
       <button type="submit" aria-label="Buscar">
         <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
       </button>
@@ -40,16 +46,15 @@
   </div>
 
   <nav class="container categorias" aria-label="Categorias">
-    <a
-      routerLink="/"
-      routerLinkActive="categorias__link--ativo"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="categorias__link"
-    >
-      Todos os produtos
-    </a>
-    @for (categoria of categorias; track categoria.slug) {
-      <a routerLink="/" class="categorias__link">{{ categoria.nome }}</a>
+    <a routerLink="/produtos" class="categorias__link">Todos os produtos</a>
+    @for (categoria of categorias(); track categoria.id) {
+      <a
+        routerLink="/produtos"
+        [queryParams]="{ categoria: categoria.slug }"
+        class="categorias__link"
+      >
+        {{ categoria.nome }}
+      </a>
     }
   </nav>
 </header>

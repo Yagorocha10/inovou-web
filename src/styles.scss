@@ -73,3 +73,92 @@ a:hover {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.botao--primario {
+  background: var(--inovou-blue);
+  color: #ffffff;
+
+  &:hover:not(:disabled) {
+    background: var(--inovou-navy);
+    color: #ffffff;
+  }
+}
+
+.botao--secundario {
+  background: var(--inovou-surface);
+  border-color: var(--inovou-border);
+  color: var(--inovou-text);
+
+  &:hover:not(:disabled) {
+    border-color: var(--inovou-blue);
+    color: var(--inovou-navy);
+  }
+}
+
+.titulo-secao {
+  margin: 0;
+  font-size: 26px;
+}
+
+.grade-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.estado {
+  background: var(--inovou-surface);
+  border: 1px dashed var(--inovou-border);
+  border-radius: 16px;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--inovou-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  strong {
+    color: var(--inovou-text);
+    font-size: 16px;
+  }
+}
+
+.esqueleto {
+  border-radius: 16px;
+  background: linear-gradient(90deg, #e9eef5 0%, #f4f7fb 50%, #e9eef5 100%);
+  background-size: 200% 100%;
+  animation: esqueleto 1.2s ease-in-out infinite;
+  min-height: 320px;
+}
+
+@keyframes esqueleto {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

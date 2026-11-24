@@ -1,0 +1,23 @@
+<article class="card" [class.card--esgotado]="!produto().disponivel">
+  <a [routerLink]="['/produtos', produto().slug]" class="card__link">
+    <div class="card__imagem">
+      @if (produto().imagemPrincipal; as imagem) {
+        <img [src]="imagem" [alt]="produto().nome" loading="lazy" />
+      } @else {
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">image</mat-icon>
+        <span>Foto do produto</span>
+      }
+      @if (!produto().disponivel) {
+        <span class="card__selo">Esgotado</span>
+      }
+    </div>
+    <div class="card__corpo">
+      <span class="card__categoria">{{ produto().categoria.nome }}</span>
+      <h3 class="card__nome">{{ produto().nome }}</h3>
+      <span class="card__preco">{{ produto().preco | currency }}</span>
+    </div>
+  </a>
+  <a [routerLink]="['/produtos', produto().slug]" class="botao botao--primario card__acao">
+    {{ produto().disponivel ? 'Ver produto' : 'Ver detalhes' }}
+  </a>
+</article>
