@@ -6,7 +6,9 @@ import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { mensagemDeErro } from '../../../core/erro-api';
 import { AuthService } from '../../../core/services/auth.service';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 
 const WHATSAPP_LOJA = '559187226520';
@@ -23,6 +25,7 @@ export class DetalheProduto {
   private readonly title = inject(Title);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly carrinho = inject(CarrinhoService);
 
   readonly slug = input.required<string>();
 
@@ -33,6 +36,7 @@ export class DetalheProduto {
 
   protected readonly imagemSelecionada = signal(0);
   protected readonly quantidade = signal(1);
+  protected readonly adicionando = signal(false);
 
   protected readonly naoEncontrado = computed(() => {
     const erro = this.produto.error() as { cause?: unknown } | undefined;
@@ -67,10 +71,24 @@ export class DetalheProduto {
       this.router.navigate(['/entrar'], { queryParams: { retorno: `/produtos/${this.slug()}` } });
       return;
     }
-    this.snackBar.open(
-      `O carrinho chega na Sprint 4. Você escolheu ${this.quantidade()} unidade(s).`,
-      'OK',
-      { duration: 4000 },
-    );
+    if (!this.produto.hasValue()) {
+      return;
+    }
+    this.adicionando.set(true);
+    this.carrinho.adicionar(this.produto.value().id, this.quantidade()).subscribe({
+      next: () => {
+        this.adicionando.set(false);
+        this.snackBar
+          .open('Produto adicionado ao carrinho', 'Ver carrinho', { duration: 4000 })
+          .onAction()
+          .subscribe(() => this.router.navigate(['/carrinho']));
+      },
+      error: (falha: unknown) => {
+        this.adicionando.set(false);
+        this.snackBar.open(mensagemDeErro(falha, 'Não foi possível adicionar ao carrinho.'), 'OK', {
+          duration: 5000,
+        });
+      },
+    });
   }
 }

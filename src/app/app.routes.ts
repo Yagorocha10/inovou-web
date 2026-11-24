@@ -38,6 +38,13 @@ export const routes: Routes = [
     title: 'Minha conta | Inovou Store',
   },
   {
+    path: 'carrinho',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/carrinho/carrinho-pagina').then((m) => m.CarrinhoPagina),
+    title: 'Carrinho | Inovou Store',
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/painel/painel').then((m) => m.Painel),

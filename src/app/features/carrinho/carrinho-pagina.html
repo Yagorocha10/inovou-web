@@ -1,0 +1,108 @@
+<div class="cabecalho">
+  <h1 class="cabecalho__titulo">Meu carrinho</h1>
+  @if (carrinho(); as atual) {
+    <span class="cabecalho__total">
+      {{ atual.quantidadeTotal }} {{ atual.quantidadeTotal === 1 ? 'item' : 'itens' }}
+    </span>
+  }
+</div>
+
+@if (erro(); as mensagem) {
+  <div class="alerta" role="alert">{{ mensagem }}</div>
+}
+
+@if (!carrinho()) {
+  <div class="esqueleto esqueleto--baixo"></div>
+} @else if (itens().length === 0) {
+  <div class="estado">
+    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">shopping_cart</mat-icon>
+    <strong>Seu carrinho está vazio.</strong>
+    <span>Que tal dar uma olhada nos produtos?</span>
+    <a routerLink="/produtos" class="botao botao--primario">Ver produtos</a>
+  </div>
+} @else {
+  <div class="layout">
+    <section class="itens" aria-label="Itens do carrinho">
+      @for (item of itens(); track item.produtoId) {
+        <article class="item" [class.item--alerta]="!item.disponivel">
+          <a [routerLink]="['/produtos', item.slug]" class="item__imagem">
+            @if (item.imagem) {
+              <img [src]="item.imagem" [alt]="item.nome" />
+            } @else {
+              <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">image</mat-icon>
+            }
+          </a>
+          <div class="item__info">
+            <a [routerLink]="['/produtos', item.slug]" class="item__nome">{{ item.nome }}</a>
+            <span class="item__unitario">{{ item.precoUnitario | currency }} cada</span>
+            @if (avisoDoItem(item); as aviso) {
+              <span class="item__aviso">{{ aviso }}</span>
+            }
+            <button
+              type="button"
+              class="item__remover"
+              [disabled]="processando()"
+              (click)="remover(item)"
+            >
+              Remover
+            </button>
+          </div>
+          <div class="quantidade" role="group" [attr.aria-label]="'Quantidade de ' + item.nome">
+            <button
+              type="button"
+              aria-label="Diminuir quantidade"
+              [disabled]="processando() || item.quantidade <= 1"
+              (click)="alterarQuantidade(item, -1)"
+            >
+              −
+            </button>
+            <span aria-live="polite">{{ item.quantidade }}</span>
+            <button
+              type="button"
+              aria-label="Aumentar quantidade"
+              [disabled]="processando() || item.quantidade >= item.estoqueDisponivel"
+              (click)="alterarQuantidade(item, 1)"
+            >
+              +
+            </button>
+          </div>
+          <span class="item__subtotal">{{ item.subtotal | currency }}</span>
+        </article>
+      }
+      <div class="itens__rodape">
+        <a routerLink="/produtos">← Continuar comprando</a>
+        <button
+          type="button"
+          class="botao botao--secundario"
+          [disabled]="processando()"
+          (click)="esvaziar()"
+        >
+          Esvaziar carrinho
+        </button>
+      </div>
+    </section>
+
+    <aside class="resumo cartao">
+      <h2 class="cartao__titulo">Resumo</h2>
+      <div class="resumo__linha">
+        <span>Subtotal</span>
+        <span>{{ carrinho()!.subtotal | currency }}</span>
+      </div>
+      <div class="resumo__linha resumo__linha--suave">
+        <span>Frete</span>
+        <span>calculado no checkout</span>
+      </div>
+      <div class="resumo__total">
+        <span>Total</span>
+        <span>{{ carrinho()!.subtotal | currency }}</span>
+      </div>
+      @if (!carrinho()!.podeFinalizar) {
+        <div class="alerta alerta--aviso">Ajuste os itens marcados para continuar.</div>
+      }
+      <button type="button" class="botao botao--primario botao--largo" disabled>
+        Finalizar compra
+      </button>
+      <small class="resumo__nota">O checkout chega na Sprint 5.</small>
+    </aside>
+  </div>
+}
