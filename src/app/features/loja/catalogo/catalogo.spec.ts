@@ -63,6 +63,7 @@ describe('Catalogo', () => {
       '13 produtos encontrados',
     );
     expect(pagina.querySelector('[aria-current="page"]')?.textContent?.trim()).toBe('2');
+    expect((pagina.querySelector('.ordenar select') as HTMLSelectElement).value).toBe('MENOR_PRECO');
     http.verify();
   });
 

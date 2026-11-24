@@ -50,9 +50,11 @@
       </div>
       <label class="ordenar">
         Ordenar por
-        <select [value]="ordenacaoAtual()" (change)="alterarOrdenacao($event)">
+        <select (change)="alterarOrdenacao($event)">
           @for (opcao of ordenacoes; track opcao.valor) {
-            <option [value]="opcao.valor">{{ opcao.rotulo }}</option>
+            <option [value]="opcao.valor" [selected]="opcao.valor === ordenacaoAtual()">
+              {{ opcao.rotulo }}
+            </option>
           }
         </select>
       </label>
