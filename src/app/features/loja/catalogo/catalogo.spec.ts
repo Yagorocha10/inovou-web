@@ -82,4 +82,23 @@ describe('Catalogo', () => {
     expect(pagina.querySelector('h1')?.textContent).toContain('xyz');
     expect(pagina.querySelector('.estado')?.textContent).toContain('Nenhum produto encontrado');
   });
+  it('deve mostrar o erro sem quebrar quando a API estiver fora do ar', async () => {
+    const fixture = TestBed.createComponent(Catalogo);
+    fixture.componentRef.setInput('categoria', 'games-e-controles');
+    fixture.detectChanges();
+    TestBed.tick();
+
+    http.expectOne('/api/categorias').flush('erro', { status: 502, statusText: 'Bad Gateway' });
+    http
+      .expectOne((r) => r.url === '/api/produtos')
+      .flush('erro', { status: 502, statusText: 'Bad Gateway' });
+    await fixture.whenStable();
+
+    const pagina = fixture.nativeElement as HTMLElement;
+    expect(pagina.querySelector('h1')?.textContent).toContain('Todos os produtos');
+    expect(pagina.querySelector('.estado')?.textContent).toContain(
+      'Não foi possível carregar os produtos',
+    );
+    expect(pagina.querySelectorAll('.filtros__link').length).toBe(1);
+  });
 });

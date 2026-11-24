@@ -21,7 +21,7 @@
     >
       Todas
     </a>
-    @for (item of categorias.value() ?? []; track item.id) {
+    @for (item of listaCategorias(); track item.id) {
       <a
         routerLink="/produtos"
         [queryParams]="{ categoria: item.slug, pagina: null }"

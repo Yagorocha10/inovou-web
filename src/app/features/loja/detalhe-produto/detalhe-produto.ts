@@ -38,15 +38,15 @@ export class DetalheProduto {
   });
 
   protected readonly linkWhatsApp = computed(() => {
-    const nome = this.produto.value()?.nome ?? '';
+    const nome = this.produto.hasValue() ? this.produto.value().nome : '';
     const texto = encodeURIComponent(`Olá! Tenho interesse no produto: ${nome}`);
     return `https://wa.me/${WHATSAPP_LOJA}?text=${texto}`;
   });
 
   constructor() {
     effect(() => {
-      const produto = this.produto.value();
-      if (produto) {
+      if (this.produto.hasValue()) {
+        const produto = this.produto.value();
         this.title.setTitle(`${produto.nome} | Inovou Store`);
         this.imagemSelecionada.set(0);
         this.quantidade.set(1);
@@ -55,7 +55,7 @@ export class DetalheProduto {
   }
 
   protected alterarQuantidade(delta: number): void {
-    const maximo = this.produto.value()?.estoque ?? 1;
+    const maximo = this.produto.hasValue() ? this.produto.value().estoque : 1;
     this.quantidade.update((atual) => Math.min(Math.max(atual + delta, 1), Math.max(maximo, 1)));
   }
 

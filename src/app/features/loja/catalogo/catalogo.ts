@@ -56,9 +56,15 @@ export class Catalogo {
     stream: () => this.categoriaService.listar(),
   });
 
+  protected readonly listaCategorias = computed(() =>
+    this.categorias.hasValue() ? this.categorias.value() : [],
+  );
+
   protected readonly categoriaAtual = computed(() => {
     const slug = this.categoria();
-    return this.categorias.value()?.find((c) => c.slug === slug);
+    return this.categorias.hasValue()
+      ? this.categorias.value().find((c) => c.slug === slug)
+      : undefined;
   });
 
   protected readonly titulo = computed(() => {
@@ -70,7 +76,7 @@ export class Catalogo {
   });
 
   protected readonly paginas = computed(() => {
-    const total = this.produtos.value()?.totalPaginas ?? 0;
+    const total = this.produtos.hasValue() ? this.produtos.value().totalPaginas : 0;
     return Array.from({ length: total }, (_, indice) => indice);
   });
 
