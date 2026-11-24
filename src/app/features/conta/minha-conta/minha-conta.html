@@ -1,0 +1,152 @@
+<div class="conta">
+  <section class="cartao">
+    <h1 class="cartao__titulo">Minha conta</h1>
+    @if (auth.usuario(); as usuario) {
+      <dl class="dados">
+        <div>
+          <dt>Nome</dt>
+          <dd>{{ usuario.nome }}</dd>
+        </div>
+        <div>
+          <dt>E-mail</dt>
+          <dd>{{ usuario.email }}</dd>
+        </div>
+        <div>
+          <dt>Perfil</dt>
+          <dd>{{ usuario.role === 'ADMIN' ? 'Administrador' : 'Cliente' }}</dd>
+        </div>
+      </dl>
+    }
+    <button type="button" class="botao botao--secundario" (click)="auth.sair()">Sair</button>
+  </section>
+
+  <section class="cartao">
+    <div class="cabecalho">
+      <h2 class="cartao__titulo">Endereços de entrega</h2>
+      @if (!formularioAberto()) {
+        <button type="button" class="botao botao--primario" (click)="novoEndereco()">
+          Novo endereço
+        </button>
+      }
+    </div>
+
+    @if (erro(); as mensagem) {
+      <div class="alerta" role="alert">{{ mensagem }}</div>
+    }
+
+    @if (formularioAberto()) {
+      <form
+        class="formulario endereco-form"
+        [formGroup]="formulario"
+        (ngSubmit)="salvar()"
+        novalidate
+      >
+        <label class="campo campo--cep">
+          <span>CEP</span>
+          <input formControlName="cep" inputmode="numeric" placeholder="00000-000" maxlength="9" />
+          @if (invalido('cep')) {
+            <small class="campo__erro">CEP inválido.</small>
+          } @else if (errosServidor()['cep']; as mensagem) {
+            <small class="campo__erro">{{ mensagem }}</small>
+          }
+        </label>
+        <label class="campo campo--largo">
+          <span>Rua / Avenida</span>
+          <input formControlName="logradouro" autocomplete="address-line1" />
+          @if (invalido('logradouro')) {
+            <small class="campo__erro">Informe a rua.</small>
+          }
+        </label>
+        <label class="campo">
+          <span>Número</span>
+          <input formControlName="numero" />
+          @if (invalido('numero')) {
+            <small class="campo__erro">Informe o número.</small>
+          }
+        </label>
+        <label class="campo">
+          <span>Complemento (opcional)</span>
+          <input formControlName="complemento" autocomplete="address-line2" />
+        </label>
+        <label class="campo">
+          <span>Bairro</span>
+          <input formControlName="bairro" />
+          @if (invalido('bairro')) {
+            <small class="campo__erro">Informe o bairro.</small>
+          }
+        </label>
+        <label class="campo">
+          <span>Cidade</span>
+          <input formControlName="cidade" autocomplete="address-level2" />
+          @if (invalido('cidade')) {
+            <small class="campo__erro">Informe a cidade.</small>
+          }
+        </label>
+        <label class="campo campo--uf">
+          <span>UF</span>
+          <select formControlName="uf">
+            @for (uf of ufs; track uf) {
+              <option [value]="uf">{{ uf }}</option>
+            }
+          </select>
+        </label>
+        <div class="acoes">
+          <button type="submit" class="botao botao--primario" [disabled]="salvando()">
+            {{
+              salvando() ? 'Salvando...' : editandoId() ? 'Salvar alterações' : 'Salvar endereço'
+            }}
+          </button>
+          <button type="button" class="botao botao--secundario" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (enderecos.isLoading()) {
+      <div class="esqueleto esqueleto--baixo"></div>
+    } @else if (enderecos.error()) {
+      <div class="estado">
+        <strong>Não foi possível carregar seus endereços.</strong>
+        <button type="button" class="botao botao--secundario" (click)="enderecos.reload()">
+          Tentar de novo
+        </button>
+      </div>
+    } @else if (enderecos.value()?.length) {
+      <ul class="enderecos">
+        @for (endereco of enderecos.value(); track endereco.id) {
+          <li class="endereco">
+            <div>
+              <strong>{{ endereco.logradouro }}, {{ endereco.numero }}</strong>
+              @if (endereco.complemento) {
+                <span> · {{ endereco.complemento }}</span>
+              }
+              <div class="endereco__linha">
+                {{ endereco.bairro }} · {{ endereco.cidade }}/{{ endereco.uf }} · CEP
+                {{ endereco.cep }}
+              </div>
+            </div>
+            <div class="endereco__acoes">
+              <button type="button" class="botao botao--secundario" (click)="editar(endereco)">
+                Editar
+              </button>
+              <button type="button" class="botao botao--perigo" (click)="remover(endereco)">
+                Remover
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else if (!formularioAberto()) {
+      <div class="estado">
+        <strong>Você ainda não cadastrou endereços.</strong>
+        <span>Cadastre um para agilizar o checkout.</span>
+      </div>
+    }
+  </section>
+
+  <section class="cartao">
+    <h2 class="cartao__titulo">Meus pedidos</h2>
+    <p class="cartao__subtitulo">O histórico de pedidos chega na Sprint 5, junto com o checkout.</p>
+  </section>
+</div>
