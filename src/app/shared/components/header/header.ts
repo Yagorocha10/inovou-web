@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { catchError, of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
 
 @Component({
@@ -13,6 +14,7 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 })
 export class Header {
   private readonly router = inject(Router);
+  protected readonly auth = inject(AuthService);
 
   protected readonly quantidadeCarrinho = signal(0);
 

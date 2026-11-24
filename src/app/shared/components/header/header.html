@@ -27,10 +27,23 @@
     </form>
 
     <nav class="acoes" aria-label="Conta e carrinho">
-      <a routerLink="/" class="acoes__link">
-        <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
-        <span class="acoes__texto">Entrar</span>
-      </a>
+      @if (auth.ehAdmin()) {
+        <a routerLink="/admin" class="acoes__link">
+          <mat-icon fontSet="material-symbols-outlined">dashboard</mat-icon>
+          <span class="acoes__texto">Admin</span>
+        </a>
+      }
+      @if (auth.logado()) {
+        <a routerLink="/conta" class="acoes__link" aria-label="Minha conta">
+          <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
+          <span class="acoes__texto">Olá, {{ auth.primeiroNome() }}</span>
+        </a>
+      } @else {
+        <a routerLink="/entrar" class="acoes__link">
+          <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
+          <span class="acoes__texto">Entrar</span>
+        </a>
+      }
       <a
         routerLink="/"
         class="acoes__link"
