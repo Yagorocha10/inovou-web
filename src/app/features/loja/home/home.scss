@@ -1,0 +1,45 @@
+.hero {
+  background: var(--inovou-navy);
+  border-radius: 20px;
+  padding: 56px 48px;
+}
+
+.hero__texto {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  h1 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.1;
+    color: #ffffff;
+  }
+
+  p {
+    margin: 0;
+    font-size: 17px;
+    color: var(--inovou-text-on-dark);
+  }
+}
+
+.hero__selo {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 32px 24px;
+  }
+
+  .hero__texto h1 {
+    font-size: 30px;
+  }
+}

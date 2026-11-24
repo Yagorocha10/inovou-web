@@ -1,9 +1,21 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+:root {
+  --inovou-navy: #0b2a5b;
+  --inovou-navy-light: #163c78;
+  --inovou-blue: #1a64d6;
+  --inovou-blue-soft: #e6eefb;
+  --inovou-bg: #f4f7fb;
+  --inovou-surface: #ffffff;
+  --inovou-border: #dce3ee;
+  --inovou-text: #0f1b2d;
+  --inovou-text-muted: #5b6b82;
+  --inovou-text-on-dark: #c9d6ea;
+  --inovou-radius: 12px;
+  --inovou-font-body: 'Inter', system-ui, sans-serif;
+  --inovou-font-title: 'Space Grotesk', 'Inter', sans-serif;
+  --inovou-container: 1200px;
+}
 
 html {
   height: 100%;
@@ -13,27 +25,51 @@ html {
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
+      typography: (
+        plain-family: 'Inter',
+        brand-family: 'Space Grotesk',
+      ),
       density: 0,
     )
   );
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
+  background-color: var(--inovou-bg);
+  color: var(--inovou-text);
+  font-family: var(--inovou-font-body);
   margin: 0;
-  height: 100%;
+  min-height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */
+
+h1,
+h2,
+h3 {
+  font-family: var(--inovou-font-title);
+  color: var(--inovou-navy);
+}
+
+a {
+  color: var(--inovou-blue);
+}
+
+a:hover {
+  color: var(--inovou-navy);
+}
+
+.container {
+  max-width: var(--inovou-container);
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

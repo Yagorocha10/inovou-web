@@ -1,0 +1,55 @@
+<div class="faixa-topo">
+  Entregamos em Belém e região · Pedidos também pelo WhatsApp (91) 8722-6520
+</div>
+
+<header class="header">
+  <div class="container header__linha">
+    <a routerLink="/" class="logo" aria-label="Inovou Store, página inicial">
+      <span class="logo__selo">iv</span>
+      <span class="logo__texto">
+        <span class="logo__inovou">INOVOU</span>
+        <span class="logo__store">STORE</span>
+      </span>
+    </a>
+
+    <form class="busca" role="search">
+      <label for="busca" class="visually-hidden">Buscar produtos</label>
+      <input id="busca" type="search" placeholder="O que você está procurando?" />
+      <button type="submit" aria-label="Buscar">
+        <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
+      </button>
+    </form>
+
+    <nav class="acoes" aria-label="Conta e carrinho">
+      <a routerLink="/" class="acoes__link">
+        <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
+        <span class="acoes__texto">Entrar</span>
+      </a>
+      <a
+        routerLink="/"
+        class="acoes__link"
+        [attr.aria-label]="'Carrinho, ' + quantidadeCarrinho() + ' itens'"
+      >
+        <mat-icon fontSet="material-symbols-outlined">shopping_cart</mat-icon>
+        <span class="acoes__texto">Carrinho</span>
+        @if (quantidadeCarrinho() > 0) {
+          <span class="acoes__badge">{{ quantidadeCarrinho() }}</span>
+        }
+      </a>
+    </nav>
+  </div>
+
+  <nav class="container categorias" aria-label="Categorias">
+    <a
+      routerLink="/"
+      routerLinkActive="categorias__link--ativo"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="categorias__link"
+    >
+      Todos os produtos
+    </a>
+    @for (categoria of categorias; track categoria.slug) {
+      <a routerLink="/" class="categorias__link">{{ categoria.nome }}</a>
+    }
+  </nav>
+</header>

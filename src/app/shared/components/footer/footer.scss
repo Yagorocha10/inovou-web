@@ -1,0 +1,63 @@
+.footer {
+  background: var(--inovou-navy);
+  color: var(--inovou-text-on-dark);
+  margin-top: 48px;
+}
+
+.footer__colunas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  padding-top: 40px;
+  padding-bottom: 32px;
+}
+
+.footer__marca {
+  max-width: 320px;
+
+  p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+.footer__nome {
+  font-family: var(--inovou-font-title);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.footer__coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+
+  a {
+    color: var(--inovou-text-on-dark);
+    text-decoration: none;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+}
+
+.footer__titulo {
+  margin: 0 0 4px;
+  font-family: var(--inovou-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.footer__copy {
+  border-top: 1px solid var(--inovou-navy-light);
+  padding-top: 16px;
+  padding-bottom: 16px;
+  font-size: 13px;
+}
