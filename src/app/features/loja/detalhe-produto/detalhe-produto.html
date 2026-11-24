@@ -1,0 +1,110 @@
+@if (produto.isLoading()) {
+  <div class="detalhe">
+    <div class="esqueleto galeria__principal"></div>
+    <div class="esqueleto"></div>
+  </div>
+} @else if (naoEncontrado()) {
+  <div class="estado">
+    <strong>Produto não encontrado.</strong>
+    <span>Ele pode ter saído do catálogo.</span>
+    <a routerLink="/produtos" class="botao botao--secundario">Ver todos os produtos</a>
+  </div>
+} @else if (produto.error()) {
+  <div class="estado">
+    <strong>Não foi possível carregar o produto.</strong>
+    <button type="button" class="botao botao--secundario" (click)="produto.reload()">
+      Tentar de novo
+    </button>
+  </div>
+} @else if (produto.value(); as item) {
+  <nav aria-label="Caminho" class="caminho">
+    <a routerLink="/">Início</a> /
+    <a routerLink="/produtos" [queryParams]="{ categoria: item.categoria.slug }">
+      {{ item.categoria.nome }}
+    </a>
+    / {{ item.nome }}
+  </nav>
+
+  <div class="detalhe">
+    <section class="galeria" aria-label="Fotos do produto">
+      <div class="galeria__principal">
+        @if (item.imagens.length > 0) {
+          <img [src]="item.imagens[imagemSelecionada()]" [alt]="item.nome" />
+        } @else {
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">image</mat-icon>
+          <span>Foto do produto</span>
+        }
+      </div>
+      @if (item.imagens.length > 1) {
+        <div class="galeria__miniaturas">
+          @for (imagem of item.imagens; track imagem; let indice = $index) {
+            <button
+              type="button"
+              class="galeria__miniatura"
+              [class.galeria__miniatura--ativa]="indice === imagemSelecionada()"
+              [attr.aria-label]="'Foto ' + (indice + 1)"
+              (click)="imagemSelecionada.set(indice)"
+            >
+              <img [src]="imagem" alt="" />
+            </button>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="info">
+      <span class="info__categoria">{{ item.categoria.nome }}</span>
+      <h1 class="info__nome">{{ item.nome }}</h1>
+
+      <div class="compra">
+        <span class="compra__preco">{{ item.preco | currency }}</span>
+        @if (item.disponivel) {
+          <span class="compra__estoque">
+            <span class="compra__ponto"></span>
+            Em estoque · {{ item.estoque }} {{ item.estoque === 1 ? 'unidade' : 'unidades' }}
+          </span>
+          <div class="compra__acoes">
+            <div class="quantidade" role="group" aria-label="Quantidade">
+              <button
+                type="button"
+                aria-label="Diminuir quantidade"
+                [disabled]="quantidade() <= 1"
+                (click)="alterarQuantidade(-1)"
+              >
+                −
+              </button>
+              <span aria-live="polite">{{ quantidade() }}</span>
+              <button
+                type="button"
+                aria-label="Aumentar quantidade"
+                [disabled]="quantidade() >= item.estoque"
+                (click)="alterarQuantidade(1)"
+              >
+                +
+              </button>
+            </div>
+            <button
+              type="button"
+              class="botao botao--primario compra__botao"
+              (click)="adicionarAoCarrinho()"
+            >
+              Adicionar ao carrinho
+            </button>
+          </div>
+        } @else {
+          <span class="compra__esgotado">Esgotado no momento</span>
+        }
+        <a [href]="linkWhatsApp()" target="_blank" rel="noopener" class="compra__whatsapp">
+          Tirar dúvida pelo WhatsApp
+        </a>
+      </div>
+
+      @if (item.descricao) {
+        <div class="descricao">
+          <h2>Descrição</h2>
+          <p>{{ item.descricao }}</p>
+        </div>
+      }
+    </section>
+  </div>
+}

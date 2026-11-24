@@ -1,0 +1,140 @@
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.caminho {
+  font-size: 13px;
+  color: var(--inovou-text-muted);
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.cabecalho__titulo {
+  margin: 0;
+  font-size: 30px;
+}
+
+.cabecalho__total {
+  font-size: 14px;
+  color: var(--inovou-text-muted);
+}
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.filtros {
+  flex: 1 1 220px;
+  max-width: 260px;
+  background: var(--inovou-surface);
+  border: 1px solid var(--inovou-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.filtros__titulo {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.filtros__link {
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--inovou-text);
+  font-size: 14px;
+
+  &:hover {
+    background: var(--inovou-bg);
+  }
+}
+
+.filtros__link--ativo {
+  background: var(--inovou-blue-soft);
+  color: var(--inovou-navy);
+  font-weight: 600;
+}
+
+.resultados {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  border: 0;
+  background: var(--inovou-blue-soft);
+  color: var(--inovou-navy);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.ordenar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--inovou-text-muted);
+
+  select {
+    font: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--inovou-border);
+    border-radius: 8px;
+    background: var(--inovou-surface);
+    color: var(--inovou-text);
+  }
+}
+
+.paginacao {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .filtros {
+    max-width: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filtros__titulo {
+    flex-basis: 100%;
+  }
+}
