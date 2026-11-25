@@ -3,9 +3,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 
 const WHATSAPP_LOJA = '559187226520';
@@ -20,6 +21,8 @@ export class DetalheProduto {
   private readonly produtoService = inject(ProdutoService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly title = inject(Title);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   readonly slug = input.required<string>();
 
@@ -60,6 +63,10 @@ export class DetalheProduto {
   }
 
   protected adicionarAoCarrinho(): void {
+    if (!this.auth.logado()) {
+      this.router.navigate(['/entrar'], { queryParams: { retorno: `/produtos/${this.slug()}` } });
+      return;
+    }
     this.snackBar.open(
       `O carrinho chega na Sprint 4. Você escolheu ${this.quantidade()} unidade(s).`,
       'OK',

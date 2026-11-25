@@ -162,3 +162,120 @@ a:hover {
     background-position: -200% 0;
   }
 }
+
+.botao--largo {
+  width: 100%;
+  min-height: 48px;
+  font-size: 15px;
+}
+
+.botao--perigo {
+  background: var(--inovou-surface);
+  border-color: #f1c4c0;
+  color: #b3261e;
+
+  &:hover:not(:disabled) {
+    background: #fdf0ef;
+  }
+}
+
+.esqueleto--baixo {
+  min-height: 96px;
+}
+
+.pagina-estreita {
+  max-width: 460px;
+  margin: 16px auto 0;
+}
+
+.cartao {
+  background: var(--inovou-surface);
+  border: 1px solid var(--inovou-border);
+  border-radius: 16px;
+  padding: 28px 24px;
+}
+
+.cartao__titulo {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.cartao__subtitulo {
+  margin: 0 0 20px;
+  color: var(--inovou-text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.cartao__rodape {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--inovou-text-muted);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--inovou-text);
+
+  input,
+  select {
+    font: inherit;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 12px 14px;
+    border: 1px solid var(--inovou-border);
+    border-radius: 10px;
+    background: var(--inovou-surface);
+    color: var(--inovou-text);
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 2px solid var(--inovou-blue-soft);
+      border-color: var(--inovou-blue);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: #b3261e;
+    }
+  }
+}
+
+.campo__erro {
+  font-weight: 500;
+  font-size: 13px;
+  color: #b3261e;
+}
+
+.campo__dica {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--inovou-text-muted);
+}
+
+.alerta {
+  background: #fdf0ef;
+  border: 1px solid #f1c4c0;
+  color: #8c1d18;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.alerta--aviso {
+  background: #fff6e5;
+  border-color: #f3d9a4;
+  color: #7a4b00;
+}
