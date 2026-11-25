@@ -7,6 +7,7 @@ import { provideLocalePtBr } from './core/locale';
 
 describe('App', () => {
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [

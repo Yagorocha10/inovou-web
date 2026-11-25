@@ -86,9 +86,10 @@
             <button
               type="button"
               class="botao botao--primario compra__botao"
+              [disabled]="adicionando()"
               (click)="adicionarAoCarrinho()"
             >
-              Adicionar ao carrinho
+              {{ adicionando() ? 'Adicionando...' : 'Adicionar ao carrinho' }}
             </button>
           </div>
         } @else {
