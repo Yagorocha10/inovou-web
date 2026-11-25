@@ -1,0 +1,124 @@
+<div class="cabecalho">
+  <nav aria-label="Caminho" class="caminho"><a routerLink="/">Início</a> / Produtos</nav>
+  <h1 class="cabecalho__titulo">{{ titulo() }}</h1>
+  @if (produtos.hasValue()) {
+    <span class="cabecalho__total">
+      {{ produtos.value().totalItens }}
+      {{ produtos.value().totalItens === 1 ? 'produto encontrado' : 'produtos encontrados' }}
+    </span>
+  }
+</div>
+
+<div class="layout">
+  <aside class="filtros" aria-label="Filtros">
+    <h2 class="filtros__titulo">Categorias</h2>
+    <a
+      routerLink="/produtos"
+      [queryParams]="{ categoria: null, pagina: null }"
+      queryParamsHandling="merge"
+      class="filtros__link"
+      [class.filtros__link--ativo]="!categoria()"
+    >
+      Todas
+    </a>
+    @for (item of listaCategorias(); track item.id) {
+      <a
+        routerLink="/produtos"
+        [queryParams]="{ categoria: item.slug, pagina: null }"
+        queryParamsHandling="merge"
+        class="filtros__link"
+        [class.filtros__link--ativo]="item.slug === categoria()"
+      >
+        {{ item.nome }}
+      </a>
+    }
+  </aside>
+
+  <section class="resultados">
+    <div class="barra">
+      <div class="chips">
+        @if (filtro().busca) {
+          <button type="button" class="chip" (click)="navegar({ busca: null, pagina: null })">
+            Busca: {{ filtro().busca }} ✕
+          </button>
+        }
+        @if (categoriaAtual(); as atual) {
+          <button type="button" class="chip" (click)="navegar({ categoria: null, pagina: null })">
+            {{ atual.nome }} ✕
+          </button>
+        }
+      </div>
+      <label class="ordenar">
+        Ordenar por
+        <select (change)="alterarOrdenacao($event)">
+          @for (opcao of ordenacoes; track opcao.valor) {
+            <option [value]="opcao.valor" [selected]="opcao.valor === ordenacaoAtual()">
+              {{ opcao.rotulo }}
+            </option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (produtos.isLoading()) {
+      <div class="grade-produtos">
+        @for (item of esqueletos; track item) {
+          <div class="esqueleto"></div>
+        }
+      </div>
+    } @else if (produtos.error()) {
+      <div class="estado">
+        <strong>Não foi possível carregar os produtos.</strong>
+        <span>Confira se a API está rodando e tente de novo.</span>
+        <button type="button" class="botao botao--secundario" (click)="produtos.reload()">
+          Tentar de novo
+        </button>
+      </div>
+    } @else if (produtos.value()?.itens?.length) {
+      <div class="grade-produtos">
+        @for (produto of produtos.value()?.itens; track produto.id) {
+          <app-card-produto [produto]="produto" />
+        }
+      </div>
+
+      @if (paginas().length > 1) {
+        <nav class="paginacao" aria-label="Páginas">
+          <button
+            type="button"
+            class="botao botao--secundario"
+            [disabled]="pagina() === 0"
+            (click)="irParaPagina(pagina() - 1)"
+          >
+            Anterior
+          </button>
+          @for (numero of paginas(); track numero) {
+            <button
+              type="button"
+              class="botao"
+              [class.botao--primario]="numero === pagina()"
+              [class.botao--secundario]="numero !== pagina()"
+              [attr.aria-current]="numero === pagina() ? 'page' : null"
+              (click)="irParaPagina(numero)"
+            >
+              {{ numero + 1 }}
+            </button>
+          }
+          <button
+            type="button"
+            class="botao botao--secundario"
+            [disabled]="pagina() >= paginas().length - 1"
+            (click)="irParaPagina(pagina() + 1)"
+          >
+            Próxima
+          </button>
+        </nav>
+      }
+    } @else {
+      <div class="estado">
+        <strong>Nenhum produto encontrado.</strong>
+        <span>Tente outra busca ou veja todas as categorias.</span>
+        <a routerLink="/produtos" class="botao botao--secundario">Ver todos os produtos</a>
+      </div>
+    }
+  </section>
+</div>

@@ -1,7 +1,64 @@
 <section class="hero">
   <div class="hero__texto">
-    <span class="hero__selo">Em construção</span>
+    <span class="hero__selo">Novidades da semana</span>
     <h1>Tecnologia e acessórios com entrega em Belém</h1>
-    <p>A vitrine com os produtos chega na Sprint 2.</p>
+    <p>Games, controles, carregadores, relógios e muito mais. Escolha online e receba em casa.</p>
+    <div class="hero__acoes">
+      <a routerLink="/produtos" class="botao hero__botao">Ver produtos</a>
+      <a
+        routerLink="/produtos"
+        [queryParams]="{ categoria: 'games-e-controles' }"
+        class="botao hero__botao--contorno"
+      >
+        Games e controles
+      </a>
+    </div>
   </div>
+</section>
+
+@if (categorias.hasValue() && categorias.value().length > 0) {
+  <section class="secao">
+    <h2 class="titulo-secao">Categorias</h2>
+    <div class="categorias">
+      @for (categoria of categorias.value(); track categoria.id) {
+        <a routerLink="/produtos" [queryParams]="{ categoria: categoria.slug }" class="categoria">
+          <span class="categoria__sigla">{{ categoria.nome.slice(0, 2).toUpperCase() }}</span>
+          {{ categoria.nome }}
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<section class="secao">
+  <div class="secao__cabecalho">
+    <h2 class="titulo-secao">Destaques</h2>
+    <a routerLink="/produtos">Ver todos</a>
+  </div>
+
+  @if (destaques.isLoading()) {
+    <div class="grade-produtos">
+      @for (item of esqueletos; track item) {
+        <div class="esqueleto"></div>
+      }
+    </div>
+  } @else if (destaques.error()) {
+    <div class="estado">
+      <strong>Não foi possível carregar os destaques.</strong>
+      <span>Confira se a API está rodando e tente de novo.</span>
+      <button type="button" class="botao botao--secundario" (click)="destaques.reload()">
+        Tentar de novo
+      </button>
+    </div>
+  } @else if (destaques.value()?.length) {
+    <div class="grade-produtos">
+      @for (produto of destaques.value(); track produto.id) {
+        <app-card-produto [produto]="produto" />
+      }
+    </div>
+  } @else {
+    <div class="estado">
+      <strong>Nenhum produto em destaque no momento.</strong>
+    </div>
+  }
 </section>
