@@ -1,0 +1,37 @@
+:host { display: block; }
+
+.meus-pedidos { padding-top: 24px; padding-bottom: 48px; }
+.cabecalho-pedidos { margin-bottom: 20px; }
+.cabecalho-pedidos__sobrelinha { margin: 0 0 4px; color: var(--inovou-text-muted); font-size: 14px; }
+.cabecalho-pedidos h1 { margin: 0; font-size: clamp(26px, 5vw, 34px); }
+.cabecalho-pedidos__total { margin: 8px 0 0; color: var(--inovou-text-muted); font-size: 14px; }
+.lista-pedidos { display: grid; gap: 14px; }
+.pedido-card { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 18px; padding: 20px 22px; }
+.pedido-card__principal { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0; }
+.pedido-card__codigo-data { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.pedido-card__codigo-data h2 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+.pedido-card__codigo-data time { color: var(--inovou-text-muted); font-size: 13px; }
+.status-pedido { display: inline-flex; align-items: center; width: fit-content; padding: 6px 11px; border-radius: 999px; background: var(--inovou-blue-soft); color: var(--inovou-navy); font-size: 13px; font-weight: 600; }
+.pedido-card__detalhes { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; white-space: nowrap; }
+.pedido-card__detalhes span { color: var(--inovou-text-muted); font-size: 13px; }
+.pedido-card__detalhes strong { color: var(--inovou-navy); font-size: 16px; }
+.pedido-card__acao { white-space: nowrap; }
+.paginacao { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px; margin-top: 22px; }
+.paginacao span { color: var(--inovou-text-muted); font-size: 14px; }
+
+@media (max-width: 760px) {
+  .pedido-card { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; padding: 18px; }
+  .pedido-card__principal { grid-column: 1 / -1; justify-content: space-between; }
+  .pedido-card__detalhes { align-items: flex-start; }
+  .pedido-card__acao { justify-self: end; }
+}
+
+@media (max-width: 480px) {
+  .meus-pedidos { padding: 16px 16px 32px; }
+  .pedido-card { grid-template-columns: minmax(0, 1fr); }
+  .pedido-card__principal { align-items: flex-start; flex-direction: column; }
+  .pedido-card__detalhes { flex-direction: row; align-items: baseline; justify-content: space-between; }
+  .pedido-card__acao { justify-self: stretch; width: 100%; }
+  .paginacao { gap: 8px; }
+  .paginacao .botao { flex: 1 1 auto; }
+}

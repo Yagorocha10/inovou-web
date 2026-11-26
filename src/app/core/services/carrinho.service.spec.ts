@@ -67,6 +67,78 @@ describe('CarrinhoService', () => {
     http.expectOne('/api/carrinho').flush(carrinhoComDoisItens);
 
     expect(service.quantidadeTotal()).toBe(2);
+    expect(service.statusCarregamento()).toBe('success');
+  });
+
+  it('deve expor falha sem tratar carrinho não carregado como vazio e permitir nova tentativa', () => {
+    logar();
+    const service = criar();
+
+    expect(service.statusCarregamento()).toBe('loading');
+    http.expectOne('/api/carrinho').flush(
+      { mensagem: 'Falha temporária' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
+
+    expect(service.statusCarregamento()).toBe('error');
+    expect(service.carrinho()).toBeNull();
+
+    service.carregar();
+    expect(service.statusCarregamento()).toBe('loading');
+    http.expectOne('/api/carrinho').flush(carrinhoComDoisItens);
+
+    expect(service.statusCarregamento()).toBe('success');
+    expect(service.carrinho()).toEqual(carrinhoComDoisItens);
+  });
+
+  it('ignora uma resposta antiga se outro carregamento foi iniciado', () => {
+    logar();
+    const service = criar();
+    service.carregar();
+
+    const [requisicaoAntiga, requisicaoAtual] = http.match('/api/carrinho');
+    expect(service.statusCarregamento()).toBe('loading');
+    requisicaoAntiga.flush(carrinhoComDoisItens);
+
+    expect(service.carrinho()).toBeNull();
+    expect(service.statusCarregamento()).toBe('loading');
+    requisicaoAtual.flush({ itens: [], quantidadeTotal: 0, subtotal: 0, podeFinalizar: false });
+
+    expect(service.carrinho()?.itens).toEqual([]);
+    expect(service.statusCarregamento()).toBe('success');
+  });
+
+  it('ignora o carregamento pendente quando uma alteração do carrinho conclui depois', () => {
+    logar();
+    const service = criar();
+    service.adicionar(4, 2).subscribe();
+    const busca = http.expectOne('/api/carrinho');
+    const alteracao = http.expectOne('/api/carrinho/itens');
+    alteracao.flush(carrinhoComDoisItens);
+
+    expect(service.carrinho()).toEqual(carrinhoComDoisItens);
+    expect(service.statusCarregamento()).toBe('success');
+
+    busca.flush({ itens: [], quantidadeTotal: 0, subtotal: 0, podeFinalizar: false });
+    expect(service.carrinho()).toEqual(carrinhoComDoisItens);
+    expect(service.quantidadeTotal()).toBe(2);
+  });
+
+  it('limpa o valor antigo enquanto recarrega e mantém falha diferente de carrinho vazio', () => {
+    logar();
+    const service = criar();
+    http.expectOne('/api/carrinho').flush(carrinhoComDoisItens);
+
+    service.carregar();
+    expect(service.carrinho()).toBeNull();
+    expect(service.statusCarregamento()).toBe('loading');
+
+    http.expectOne('/api/carrinho').flush(
+      { mensagem: 'Falha temporária' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
+    expect(service.carrinho()).toBeNull();
+    expect(service.statusCarregamento()).toBe('error');
   });
 
   it('deve atualizar o contador ao adicionar e limpar ao sair', () => {

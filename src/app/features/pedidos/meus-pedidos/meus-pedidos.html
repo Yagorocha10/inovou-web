@@ -1,0 +1,62 @@
+<main class="meus-pedidos container">
+  <header class="cabecalho-pedidos">
+    <p class="cabecalho-pedidos__sobrelinha">Sua conta</p>
+    <h1>Meus pedidos</h1>
+    @if (pedidos.hasValue() && totalPedidos() > 0) {
+      <p class="cabecalho-pedidos__total">{{ totalPedidos() }} {{ totalPedidos() === 1 ? 'pedido' : 'pedidos' }}</p>
+    }
+  </header>
+
+  @if (pedidos.isLoading()) {
+    <section class="estado" role="status" aria-live="polite">
+      <strong>Carregando seus pedidos...</strong>
+    </section>
+  } @else if (pedidos.error()) {
+    <section class="estado" role="alert">
+      <strong>Não foi possível carregar seus pedidos.</strong>
+      <span>Confira sua conexão e tente novamente.</span>
+      <button type="button" class="botao botao--secundario" (click)="pedidos.reload()">
+        Tentar novamente
+      </button>
+    </section>
+  } @else if (pedidos.hasValue() && pedidos.value().totalItens === 0) {
+    <section class="estado">
+      <strong>Você ainda não tem pedidos.</strong>
+      <span>Quando fizer uma compra, ela aparecerá aqui.</span>
+      <a routerLink="/produtos" class="botao botao--primario">Continuar comprando</a>
+    </section>
+  } @else if (pedidos.hasValue()) {
+    <section class="lista-pedidos" aria-label="Lista de pedidos">
+      @for (pedido of pedidos.value().itens; track rastrearPedido($index, pedido)) {
+        <article class="cartao pedido-card">
+          <div class="pedido-card__principal">
+            <div class="pedido-card__codigo-data">
+              <h2>{{ pedido.codigo }}</h2>
+              <time [attr.datetime]="pedido.criadoEm">{{ pedido.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</time>
+            </div>
+            <span class="status-pedido">{{ rotulosStatus[pedido.status] }}</span>
+          </div>
+          <div class="pedido-card__detalhes">
+            <span>{{ pedido.quantidadeItens }} {{ pedido.quantidadeItens === 1 ? 'item' : 'itens' }}</span>
+            <strong>{{ pedido.total | currency }}</strong>
+          </div>
+          <a class="botao botao--secundario pedido-card__acao" [routerLink]="['/pedidos', pedido.id]">
+            Ver detalhes
+          </a>
+        </article>
+      }
+    </section>
+
+    @if (pedidos.value().totalPaginas > 1) {
+      <nav class="paginacao" aria-label="Paginação dos pedidos">
+        <button type="button" class="botao botao--secundario" [disabled]="!podeVoltar()" (click)="voltarPagina()">
+          Anterior
+        </button>
+        <span aria-live="polite">Página {{ paginaAtualExibida() }} de {{ pedidos.value().totalPaginas }}</span>
+        <button type="button" class="botao botao--secundario" [disabled]="!podeAvancar()" (click)="avancarPagina()">
+          Próxima
+        </button>
+      </nav>
+    }
+  }
+</main>

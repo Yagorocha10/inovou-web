@@ -11,18 +11,29 @@
   <div class="alerta" role="alert">{{ mensagem }}</div>
 }
 
-@if (!carrinho()) {
-  <div class="esqueleto esqueleto--baixo"></div>
-} @else if (itens().length === 0) {
-  <div class="estado">
-    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">shopping_cart</mat-icon>
-    <strong>Seu carrinho está vazio.</strong>
-    <span>Que tal dar uma olhada nos produtos?</span>
-    <a routerLink="/produtos" class="botao botao--primario">Ver produtos</a>
+@if (statusCarrinho() === 'idle' || statusCarrinho() === 'loading') {
+  <div class="estado" role="status" aria-live="polite">
+    <strong>Carregando seu carrinho...</strong>
   </div>
-} @else {
-  <div class="layout">
-    <section class="itens" aria-label="Itens do carrinho">
+} @else if (statusCarrinho() === 'error') {
+  <div class="estado" role="alert">
+    <strong>Não foi possível carregar seu carrinho.</strong>
+    <span>Verifique sua conexão e tente novamente.</span>
+    <button type="button" class="botao botao--secundario" (click)="tentarCarregar()">
+      Tentar novamente
+    </button>
+  </div>
+} @else if (carrinho(); as atual) {
+  @if (itens().length === 0) {
+    <div class="estado">
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">shopping_cart</mat-icon>
+      <strong>Seu carrinho está vazio.</strong>
+      <span>Que tal dar uma olhada nos produtos?</span>
+      <a routerLink="/produtos" class="botao botao--primario">Ver produtos</a>
+    </div>
+  } @else {
+    <div class="layout">
+      <section class="itens" aria-label="Itens do carrinho">
       @for (item of itens(); track item.produtoId) {
         <article class="item" [class.item--alerta]="!item.disponivel">
           <a [routerLink]="['/produtos', item.slug]" class="item__imagem">
@@ -80,29 +91,33 @@
           Esvaziar carrinho
         </button>
       </div>
-    </section>
+      </section>
 
-    <aside class="resumo cartao">
-      <h2 class="cartao__titulo">Resumo</h2>
-      <div class="resumo__linha">
-        <span>Subtotal</span>
-        <span>{{ carrinho()!.subtotal | currency }}</span>
-      </div>
-      <div class="resumo__linha resumo__linha--suave">
-        <span>Frete</span>
-        <span>calculado no checkout</span>
-      </div>
-      <div class="resumo__total">
-        <span>Total</span>
-        <span>{{ carrinho()!.subtotal | currency }}</span>
-      </div>
-      @if (!carrinho()!.podeFinalizar) {
-        <div class="alerta alerta--aviso">Ajuste os itens marcados para continuar.</div>
-      }
-      <button type="button" class="botao botao--primario botao--largo" disabled>
-        Finalizar compra
-      </button>
-      <small class="resumo__nota">O checkout chega na Sprint 5.</small>
-    </aside>
-  </div>
+      <aside class="resumo cartao">
+        <h2 class="cartao__titulo">Resumo</h2>
+        <div class="resumo__linha">
+          <span>Subtotal</span>
+          <span>{{ atual.subtotal | currency }}</span>
+        </div>
+        <div class="resumo__linha resumo__linha--suave">
+          <span>Frete</span>
+          <span>calculado no checkout</span>
+        </div>
+        <div class="resumo__total">
+          <span>Total parcial</span>
+          <span>{{ atual.subtotal | currency }}</span>
+        </div>
+        @if (!atual.podeFinalizar) {
+          <div class="alerta alerta--aviso">Ajuste os itens marcados para continuar.</div>
+        }
+        @if (atual.podeFinalizar) {
+          <a routerLink="/checkout" class="botao botao--primario botao--largo">Finalizar compra</a>
+        } @else {
+          <button type="button" class="botao botao--primario botao--largo" disabled>
+            Finalizar compra
+          </button>
+        }
+      </aside>
+    </div>
+  }
 }

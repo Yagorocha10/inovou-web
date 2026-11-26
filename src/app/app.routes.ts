@@ -45,6 +45,36 @@ export const routes: Routes = [
     title: 'Carrinho | Inovou Store',
   },
   {
+    path: 'checkout',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/checkout/checkout-pagina/checkout-pagina').then((m) => m.CheckoutPagina),
+    title: 'Checkout | Inovou Store',
+  },
+  {
+    path: 'pedidos',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pedidos/meus-pedidos/meus-pedidos').then((m) => m.MeusPedidos),
+    title: 'Meus pedidos | Inovou Store',
+  },
+  {
+    path: 'pedidos/:id/confirmado',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pedidos/pedido-confirmado/pedido-confirmado').then(
+        (m) => m.PedidoConfirmado,
+      ),
+    title: 'Pedido confirmado | Inovou Store',
+  },
+  {
+    path: 'pedidos/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/pedidos/detalhe-pedido/detalhe-pedido').then((m) => m.DetalhePedido),
+    title: 'Detalhes do pedido | Inovou Store',
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/painel/painel').then((m) => m.Painel),
