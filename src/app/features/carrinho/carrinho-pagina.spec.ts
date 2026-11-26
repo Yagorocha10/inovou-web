@@ -41,6 +41,14 @@ describe('CarrinhoPagina', () => {
 
   beforeEach(async () => {
     localStorage.clear();
+    localStorage.setItem(
+      'inovou.sessao',
+      JSON.stringify({
+        token: 't',
+        expiraEm: new Date(Date.now() + 60_000).toISOString(),
+        usuario: { id: 1, nome: 'Yago', email: 'y@x.com', role: 'CLIENTE' },
+      }),
+    );
     await TestBed.configureTestingModule({
       imports: [CarrinhoPagina],
       providers: [
@@ -56,15 +64,17 @@ describe('CarrinhoPagina', () => {
   async function abrirCom(dados: Carrinho): Promise<HTMLElement> {
     const fixture = TestBed.createComponent(CarrinhoPagina);
     fixture.detectChanges();
+    TestBed.tick();
     http.expectOne('/api/carrinho').flush(dados);
     await fixture.whenStable();
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('deve listar os itens, o total e avisar sobre o item indisponível', async () => {
+  it('deve listar os itens, o total parcial e avisar sobre o item indisponível', async () => {
     const pagina = await abrirCom(carrinho);
 
     expect(pagina.querySelectorAll('.item').length).toBe(2);
+    expect(pagina.querySelector('.resumo__total')?.textContent).toContain('Total parcial');
     expect(pagina.querySelector('.resumo__total')?.textContent?.replace(/\s/g, ' ')).toContain(
       'R$ 130,00',
     );
@@ -93,5 +103,44 @@ describe('CarrinhoPagina', () => {
     });
 
     expect(pagina.querySelector('.estado')?.textContent).toContain('Seu carrinho está vazio');
+    expect(pagina.querySelector('.estado a[href="/produtos"]')).not.toBeNull();
+  });
+
+  it('deve oferecer checkout quando o carrinho pode ser finalizado', async () => {
+    const pagina = await abrirCom({
+      ...carrinho,
+      itens: [carrinho.itens[0]],
+      quantidadeTotal: 2,
+      subtotal: 80,
+      podeFinalizar: true,
+    });
+
+    expect(pagina.querySelector('a[href="/checkout"]')?.textContent).toContain('Finalizar compra');
+  });
+
+  it('deve mostrar erro ao carregar e permitir nova tentativa', async () => {
+    const fixture = TestBed.createComponent(CarrinhoPagina);
+    fixture.detectChanges();
+    TestBed.tick();
+    http.expectOne('/api/carrinho').flush(
+      { mensagem: 'Falha temporária' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Não foi possível carregar seu carrinho.');
+    expect(fixture.nativeElement.querySelector('.esqueleto')).toBeNull();
+
+    (fixture.nativeElement.querySelector('button') as HTMLButtonElement).click();
+    TestBed.tick();
+    http.expectOne('/api/carrinho').flush({
+      itens: [],
+      quantidadeTotal: 0,
+      subtotal: 0,
+      podeFinalizar: false,
+    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Seu carrinho está vazio.');
   });
 });

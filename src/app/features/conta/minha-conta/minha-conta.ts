@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { camposComErro, mensagemDeErro } from '../../../core/erro-api';
 import { DadosEndereco, Endereco, UFS } from '../../../core/models/auth';
 import { AuthService } from '../../../core/services/auth.service';
@@ -10,7 +11,7 @@ type CampoEndereco = keyof DadosEndereco;
 
 @Component({
   selector: 'app-minha-conta',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './minha-conta.html',
   styleUrl: './minha-conta.scss',
 })

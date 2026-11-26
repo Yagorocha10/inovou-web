@@ -4,6 +4,8 @@ import { Observable, tap } from 'rxjs';
 import { Carrinho } from '../models/carrinho';
 import { AuthService } from './auth.service';
 
+export type StatusCarregamentoCarrinho = 'idle' | 'loading' | 'success' | 'error';
+
 @Injectable({ providedIn: 'root' })
 export class CarrinhoService {
   private readonly http = inject(HttpClient);
@@ -11,24 +13,42 @@ export class CarrinhoService {
   private readonly url = '/api/carrinho';
 
   private readonly estado = signal<Carrinho | null>(null);
+  private readonly estadoCarregamento = signal<StatusCarregamentoCarrinho>('idle');
+  private sequenciaCarregamento = 0;
 
   readonly carrinho = this.estado.asReadonly();
   readonly quantidadeTotal = computed(() => this.estado()?.quantidadeTotal ?? 0);
+  readonly statusCarregamento = this.estadoCarregamento.asReadonly();
 
   constructor() {
     effect(() => {
       if (this.auth.logado()) {
         untracked(() => this.carregar());
       } else {
+        this.sequenciaCarregamento += 1;
         this.estado.set(null);
+        this.estadoCarregamento.set('idle');
       }
     });
   }
 
   carregar(): void {
+    const sequencia = ++this.sequenciaCarregamento;
+    this.estado.set(null);
+    this.estadoCarregamento.set('loading');
     this.http.get<Carrinho>(this.url).subscribe({
-      next: (carrinho) => this.estado.set(carrinho),
-      error: () => undefined,
+      next: (carrinho) => {
+        if (sequencia !== this.sequenciaCarregamento) {
+          return;
+        }
+        this.estado.set(carrinho);
+        this.estadoCarregamento.set('success');
+      },
+      error: () => {
+        if (sequencia === this.sequenciaCarregamento) {
+          this.estadoCarregamento.set('error');
+        }
+      },
     });
   }
 
@@ -51,6 +71,12 @@ export class CarrinhoService {
   }
 
   private atualizar(requisicao: Observable<Carrinho>): Observable<Carrinho> {
-    return requisicao.pipe(tap((carrinho) => this.estado.set(carrinho)));
+    return requisicao.pipe(
+      tap((carrinho) => {
+        this.sequenciaCarregamento += 1;
+        this.estado.set(carrinho);
+        this.estadoCarregamento.set('success');
+      }),
+    );
   }
 }

@@ -1,0 +1,53 @@
+:host { display: block; }
+
+.pedido-confirmado { padding-top: 24px; padding-bottom: 48px; }
+.confirmacao { margin-bottom: 24px; padding: 32px; border: 1px solid var(--inovou-border); border-radius: 16px; background: var(--inovou-surface); text-align: center; }
+.confirmacao__icone { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 50%; background: #e8f5ed; color: #176b37; font-size: 28px; font-weight: 700; }
+.confirmacao__sobrelinha { margin: 0 0 4px; color: var(--inovou-text-muted); font-size: 14px; }
+.confirmacao h1 { margin: 0; font-size: clamp(26px, 5vw, 36px); }
+.confirmacao > p:not(.confirmacao__sobrelinha) { color: var(--inovou-text-muted); line-height: 1.5; }
+.confirmacao__identificacao { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin: 24px 0 12px; }
+.confirmacao__identificacao > div { display: flex; flex-direction: column; gap: 6px; min-width: 180px; padding: 14px 20px; border: 1px solid var(--inovou-border); border-radius: 12px; }
+.confirmacao__identificacao span { color: var(--inovou-text-muted); font-size: 13px; }
+.confirmacao__codigo { color: var(--inovou-navy); font-family: var(--inovou-font-title); font-size: 22px; overflow-wrap: anywhere; }
+.status-pedido { align-self: center; padding: 6px 12px; border-radius: 999px; background: var(--inovou-blue-soft); color: var(--inovou-navy); }
+.confirmacao__data { margin: 0; font-size: 14px; }
+.pedido-confirmado__colunas { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 20px; }
+.pedido-confirmado__principal { display: grid; gap: 20px; min-width: 0; }
+.secao-pedido, .resumo-pedido { min-width: 0; padding: 24px; }
+.itens-pedido { margin: 0; padding: 0; list-style: none; }
+.item-pedido { display: grid; grid-template-columns: 68px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #e8edf4; }
+.item-pedido:last-child { border-bottom: 0; padding-bottom: 0; }
+.item-pedido__imagem { width: 68px; height: 68px; border-radius: 10px; background: #eef2f8; object-fit: cover; }
+.item-pedido__imagem--vazia { display: block; }
+.item-pedido__detalhes { display: flex; flex-direction: column; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
+.item-pedido__detalhes span { color: var(--inovou-text-muted); font-size: 14px; }
+.item-pedido__subtotal { white-space: nowrap; }
+address { color: var(--inovou-text); font-style: normal; line-height: 1.7; overflow-wrap: anywhere; }
+.pagamento__forma { margin: 4px 0 12px; color: var(--inovou-navy); font-weight: 700; }
+.pagamento__instrucoes, .pagamento__aviso { margin: 12px 0 0; padding: 14px; border-radius: 10px; background: #f4f7fb; line-height: 1.6; overflow-wrap: anywhere; white-space: pre-line; }
+.pagamento__aviso { border: 1px solid #f3d9a4; background: #fff6e5; color: #7a4b00; }
+.codigo-pix { margin-top: 14px; }
+.codigo-pix h3 { margin: 0 0 8px; font-size: 16px; }
+.codigo-pix code { display: block; padding: 14px; border: 1px solid var(--inovou-border); border-radius: 10px; background: #f8faff; font: 14px/1.5 ui-monospace, monospace; overflow-wrap: anywhere; user-select: all; }
+.resumo-pedido { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 14px; }
+.resumo-pedido__linha { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+.resumo-pedido__linha--total { padding-top: 14px; border-top: 1px solid var(--inovou-border); color: var(--inovou-navy); font-size: 17px; }
+.acoes-pedido { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 24px; }
+
+@media (max-width: 860px) {
+  .pedido-confirmado__colunas { grid-template-columns: minmax(0, 1fr); }
+  .resumo-pedido { position: static; grid-row: 1; }
+}
+
+@media (max-width: 640px) {
+  .pedido-confirmado { padding: 16px 16px 32px; }
+  .confirmacao { padding: 24px 16px; }
+  .confirmacao__identificacao { gap: 10px; }
+  .confirmacao__identificacao > div { flex: 1 1 140px; min-width: 0; padding: 12px; }
+  .secao-pedido, .resumo-pedido { padding: 20px 16px; }
+  .item-pedido { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; }
+  .item-pedido__imagem { width: 52px; height: 52px; }
+  .item-pedido__subtotal { grid-column: 2; }
+  .acoes-pedido > a { flex: 1 1 100%; }
+}

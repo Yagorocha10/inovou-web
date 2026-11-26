@@ -26,7 +26,7 @@
       </button>
     </form>
 
-    <nav class="acoes" aria-label="Conta e carrinho">
+    <nav class="acoes" aria-label="Conta, pedidos e carrinho">
       @if (auth.ehAdmin()) {
         <a routerLink="/admin" class="acoes__link">
           <mat-icon fontSet="material-symbols-outlined">dashboard</mat-icon>
@@ -37,6 +37,10 @@
         <a routerLink="/conta" class="acoes__link" aria-label="Minha conta">
           <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
           <span class="acoes__texto">Olá, {{ auth.primeiroNome() }}</span>
+        </a>
+        <a routerLink="/pedidos" class="acoes__link" aria-label="Meus pedidos">
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">receipt_long</mat-icon>
+          <span class="acoes__texto">Meus pedidos</span>
         </a>
       } @else {
         <a routerLink="/entrar" class="acoes__link">

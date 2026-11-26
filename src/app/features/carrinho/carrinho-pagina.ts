@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
@@ -13,17 +13,14 @@ import { CarrinhoService } from '../../core/services/carrinho.service';
   templateUrl: './carrinho-pagina.html',
   styleUrl: './carrinho-pagina.scss',
 })
-export class CarrinhoPagina implements OnInit {
+export class CarrinhoPagina {
   private readonly carrinhoService = inject(CarrinhoService);
 
   protected readonly carrinho = this.carrinhoService.carrinho;
+  protected readonly statusCarrinho = this.carrinhoService.statusCarregamento;
   protected readonly processando = signal(false);
   protected readonly erro = signal<string | null>(null);
   protected readonly itens = computed(() => this.carrinho()?.itens ?? []);
-
-  ngOnInit(): void {
-    this.carrinhoService.carregar();
-  }
 
   protected alterarQuantidade(item: ItemCarrinho, delta: number): void {
     const quantidade = item.quantidade + delta;
@@ -41,6 +38,10 @@ export class CarrinhoPagina implements OnInit {
     if (confirm('Remover todos os produtos do carrinho?')) {
       this.executar(this.carrinhoService.esvaziar());
     }
+  }
+
+  protected tentarCarregar(): void {
+    this.carrinhoService.carregar();
   }
 
   protected avisoDoItem(item: ItemCarrinho): string | null {

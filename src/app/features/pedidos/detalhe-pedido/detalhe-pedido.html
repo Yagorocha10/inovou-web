@@ -1,0 +1,111 @@
+<main class="detalhe-pedido container">
+  @if (pedido.hasValue()) {
+    @let atual = pedido.value();
+    @if (pedido.isLoading()) {
+      <p class="alerta alerta--aviso atualizando" role="status" aria-live="polite">Atualizando os dados do pedido...</p>
+    }
+    @if (cancelamentoConcluido()) {
+      <p class="mensagem-sucesso" role="status" aria-live="polite">A API confirmou o cancelamento do pedido.</p>
+    }
+    @if (erroCancelamento(); as mensagem) {
+      <p class="alerta" role="alert">{{ mensagem }}</p>
+    }
+
+    <header class="cabecalho-detalhe">
+      <a class="voltar" routerLink="/pedidos">← Voltar para meus pedidos</a>
+      <div class="cabecalho-detalhe__titulo">
+        <div>
+          <p class="cabecalho-detalhe__sobrelinha">Detalhes do pedido</p>
+          <h1>{{ atual.codigo }}</h1>
+          <p class="cabecalho-detalhe__data">Compra realizada em {{ atual.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <span class="status-pedido">{{ rotulosStatus[atual.status] }}</span>
+      </div>
+    </header>
+
+    <div class="detalhe-pedido__colunas">
+      <div class="detalhe-pedido__principal">
+        <section class="cartao secao-detalhe" aria-labelledby="titulo-itens">
+          <h2 id="titulo-itens" class="cartao__titulo">Itens do pedido</h2>
+          <ul class="itens-pedido">
+            @for (item of atual.itens; track item.produtoId) {
+              <li class="item-pedido">
+                @if (item.imagem) {
+                  <img class="item-pedido__imagem" [src]="item.imagem" [alt]="item.nome" />
+                } @else {
+                  <div class="item-pedido__imagem item-pedido__imagem--vazia" aria-hidden="true"></div>
+                }
+                <div class="item-pedido__detalhes">
+                  <strong>{{ item.nome }}</strong>
+                  <span>{{ item.precoUnitario | currency }} por unidade · Quantidade: {{ item.quantidade }}</span>
+                </div>
+                <strong class="item-pedido__subtotal">{{ item.subtotal | currency }}</strong>
+              </li>
+            }
+          </ul>
+        </section>
+
+        <section class="cartao secao-detalhe" aria-labelledby="titulo-entrega">
+          <h2 id="titulo-entrega" class="cartao__titulo">Endereço de entrega</h2>
+          <address>
+            {{ atual.endereco.logradouro }}, {{ atual.endereco.numero }}
+            @if (atual.endereco.complemento) { · {{ atual.endereco.complemento }} }
+            <br />{{ atual.endereco.bairro }} · {{ atual.endereco.cidade }}/{{ atual.endereco.uf }}
+            <br />CEP {{ atual.endereco.cep }}
+          </address>
+        </section>
+
+        <section class="cartao secao-detalhe pagamento" aria-labelledby="titulo-pagamento">
+          <h2 id="titulo-pagamento" class="cartao__titulo">Pagamento</h2>
+          <p class="pagamento__forma">{{ formaPagamento(atual.pagamento.forma) }}</p>
+          @if (atual.pagamento.forma === 'PIX' && atual.pagamento.codigoPix) {
+            <div class="codigo-pix">
+              <h3>Código Pix</h3>
+              <code>{{ atual.pagamento.codigoPix }}</code>
+            </div>
+          }
+          @if (atual.pagamento.instrucoes) {
+            <p class="pagamento__instrucoes">{{ atual.pagamento.instrucoes }}</p>
+          }
+          @if (atual.pagamento.forma === 'CARTAO') {
+            <p class="pagamento__aviso">Pagamento simulado. Nenhuma cobrança real foi realizada.</p>
+          }
+        </section>
+      </div>
+
+      <aside class="cartao resumo-pedido" aria-labelledby="titulo-resumo">
+        <h2 id="titulo-resumo" class="cartao__titulo">Resumo financeiro</h2>
+        <div class="resumo-pedido__linha"><span>Subtotal</span><span>{{ atual.subtotal | currency }}</span></div>
+        <div class="resumo-pedido__linha"><span>Frete</span><span>{{ atual.frete | currency }}</span></div>
+        <div class="resumo-pedido__linha resumo-pedido__linha--total"><strong>Total</strong><strong>{{ atual.total | currency }}</strong></div>
+      </aside>
+    </div>
+
+    <footer class="acoes-pedido">
+      @if (atual.podeCancelar && !cancelamentoConcluido()) {
+        <button
+          type="button"
+          class="botao botao--perigo"
+          [disabled]="cancelando()"
+          (click)="cancelarPedido(atual)"
+        >
+          {{ cancelando() ? 'Processando cancelamento...' : 'Cancelar pedido' }}
+        </button>
+      }
+      <a class="botao botao--secundario" routerLink="/pedidos">Voltar para meus pedidos</a>
+      <a class="botao botao--primario" routerLink="/produtos">Continuar comprando</a>
+    </footer>
+  } @else if (pedido.isLoading()) {
+    <section class="estado" role="status" aria-live="polite">
+      <strong>Carregando os dados do pedido...</strong>
+    </section>
+  } @else if (pedido.error()) {
+    <section class="estado" role="alert">
+      <strong>{{ mensagemErroCarregamento() }}</strong>
+      <button type="button" class="botao botao--secundario" (click)="pedido.reload()">
+        Tentar novamente
+      </button>
+      <a class="botao botao--secundario" routerLink="/pedidos">Voltar para meus pedidos</a>
+    </section>
+  }
+</main>
