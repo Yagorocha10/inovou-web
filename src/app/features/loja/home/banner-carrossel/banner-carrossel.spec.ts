@@ -20,12 +20,12 @@ describe('BannerCarrossel', () => {
 
   it('mostra um banner por vez e navega pelas setas', async () => {
     const tela = await montar();
-    expect(tela.querySelectorAll('.banner')).toHaveLength(3);
-    expect(visivel(tela)).toBe('Games na palma da mão');
+    expect(tela.querySelectorAll('.banner')).toHaveLength(4);
+    expect(visivel(tela)).toBe('Console portátil R36');
 
     (tela.querySelector('[aria-label="Próximo banner"]') as HTMLButtonElement).click();
     TestBed.tick();
-    expect(visivel(tela)).toBe('Bateria cheia o dia todo');
+    expect(visivel(tela)).toBe('Games na palma da mão');
 
     (tela.querySelector('[aria-label="Banner anterior"]') as HTMLButtonElement).click();
     (tela.querySelector('[aria-label="Banner anterior"]') as HTMLButtonElement).click();
@@ -33,10 +33,17 @@ describe('BannerCarrossel', () => {
     expect(visivel(tela)).toBe('Pague com Pix na hora');
   });
 
+  it('o banner do R36 leva direto à página do produto', async () => {
+    const tela = await montar();
+
+    const acao = tela.querySelector('.banner:not([aria-hidden="true"]) .banner__acao');
+    expect(acao?.getAttribute('href')).toBe('/produtos/console-portatil-r36');
+  });
+
   it('os pontos levam direto ao banner escolhido e o botão abre a categoria', async () => {
     const tela = await montar();
 
-    (tela.querySelectorAll('.carrossel__ponto')[1] as HTMLButtonElement).click();
+    (tela.querySelectorAll('.carrossel__ponto')[2] as HTMLButtonElement).click();
     TestBed.tick();
 
     expect(visivel(tela)).toBe('Bateria cheia o dia todo');

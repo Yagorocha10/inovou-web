@@ -2,10 +2,11 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface Banner {
-  tipo: 'games' | 'carregadores' | 'pix';
+  tipo: 'r36' | 'games' | 'carregadores' | 'pix';
   titulo: string;
   texto: string;
   acao: string;
+  link: string;
   categoria: string | null;
 }
 
@@ -24,10 +25,20 @@ export class BannerCarrossel implements OnInit {
 
   protected readonly banners: Banner[] = [
     {
+      tipo: 'r36',
+      titulo: 'Console portátil R36',
+      texto:
+        'Jogos clássicos numa tela que cabe no bolso. Leve para a escola, o trabalho ou a viagem.',
+      acao: 'Ver o console R36',
+      link: '/produtos/console-portatil-r36',
+      categoria: null,
+    },
+    {
       tipo: 'games',
       titulo: 'Games na palma da mão',
       texto: 'Controles sem fio e consoles portáteis para jogar em casa ou levar para onde quiser.',
       acao: 'Ver games e controles',
+      link: '/produtos',
       categoria: 'games-e-controles',
     },
     {
@@ -35,6 +46,7 @@ export class BannerCarrossel implements OnInit {
       titulo: 'Bateria cheia o dia todo',
       texto: 'Carregadores e cabos para iPhone e Android, com entrega rápida em Belém.',
       acao: 'Ver carregadores e cabos',
+      link: '/produtos',
       categoria: 'carregadores-e-cabos',
     },
     {
@@ -42,6 +54,7 @@ export class BannerCarrossel implements OnInit {
       titulo: 'Pague com Pix na hora',
       texto: 'No fim da compra é só ler o QR Code no app do banco. Sem boleto, sem espera.',
       acao: 'Escolher produtos',
+      link: '/produtos',
       categoria: null,
     },
   ];

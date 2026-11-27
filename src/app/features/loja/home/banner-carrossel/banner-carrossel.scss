@@ -28,6 +28,10 @@
   color: #ffffff;
 }
 
+.banner--r36 {
+  background: var(--inovou-navy);
+}
+
 .banner--games {
   background: var(--inovou-blue);
 }
@@ -73,6 +77,7 @@
   }
 }
 
+.banner--r36 .banner__acao,
 .banner--carregadores .banner__acao {
   background: var(--inovou-blue);
   color: #ffffff;
