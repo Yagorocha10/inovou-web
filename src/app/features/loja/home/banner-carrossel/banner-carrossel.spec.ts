@@ -25,7 +25,7 @@ describe('BannerCarrossel', () => {
 
     (tela.querySelector('[aria-label="Próximo banner"]') as HTMLButtonElement).click();
     TestBed.tick();
-    expect(visivel(tela)).toBe('Games na palma da mão');
+    expect(visivel(tela)).toBe('Game Stick 4K com 2 controles');
 
     (tela.querySelector('[aria-label="Banner anterior"]') as HTMLButtonElement).click();
     (tela.querySelector('[aria-label="Banner anterior"]') as HTMLButtonElement).click();

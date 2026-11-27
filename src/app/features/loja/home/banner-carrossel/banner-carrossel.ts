@@ -2,7 +2,7 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface Banner {
-  tipo: 'r36' | 'games' | 'carregadores' | 'pix';
+  tipo: 'r36' | 'game-stick' | 'carregadores' | 'pix';
   titulo: string;
   texto: string;
   acao: string;
@@ -34,12 +34,13 @@ export class BannerCarrossel implements OnInit {
       categoria: null,
     },
     {
-      tipo: 'games',
-      titulo: 'Games na palma da mão',
-      texto: 'Controles sem fio e consoles portáteis para jogar em casa ou levar para onde quiser.',
-      acao: 'Ver games e controles',
-      link: '/produtos',
-      categoria: 'games-e-controles',
+      tipo: 'game-stick',
+      titulo: 'Game Stick 4K com 2 controles',
+      texto:
+        'Ligue na TV pelo HDMI e jogue os clássicos com dois controles sem fio. Diversão para a família toda.',
+      acao: 'Ver o Game Stick',
+      link: '/produtos/game-stick',
+      categoria: null,
     },
     {
       tipo: 'carregadores',

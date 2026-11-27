@@ -32,7 +32,7 @@
   background: var(--inovou-navy);
 }
 
-.banner--games {
+.banner--game-stick {
   background: var(--inovou-blue);
 }
 
@@ -96,6 +96,43 @@
     width: 100%;
     max-width: 460px;
     height: auto;
+  }
+}
+
+.banner__foto {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 440px;
+  transform: rotate(-2deg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 6px solid #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 24px 48px rgba(0, 14, 43, 0.35);
+  }
+}
+
+.banner__selo {
+  position: absolute;
+  left: -14px;
+  bottom: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--inovou-navy);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transform: rotate(2deg);
+
+  .material-symbols-outlined {
+    font-size: 20px;
   }
 }
 
@@ -174,6 +211,16 @@
     svg {
       max-width: 240px;
     }
+  }
+
+  .banner__foto {
+    max-width: 280px;
+  }
+
+  .banner__selo {
+    left: -6px;
+    bottom: 12px;
+    font-size: 0.8125rem;
   }
 
   .banner__acao {
