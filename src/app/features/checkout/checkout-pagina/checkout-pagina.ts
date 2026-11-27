@@ -29,6 +29,7 @@ export class CheckoutPagina implements OnInit, OnDestroy {
   protected readonly carrinho = this.carrinhoService.carrinho;
   protected readonly statusCarrinho = this.carrinhoService.statusCarregamento;
   protected readonly itens = computed(() => this.carrinho()?.itens ?? []);
+  private readonly pedidoConcluido = signal(false);
   protected readonly ufs = UFS;
   protected readonly etapa = signal<EtapaCheckout>(1);
   protected readonly enderecos = signal<Endereco[]>([]);
@@ -61,6 +62,7 @@ export class CheckoutPagina implements OnInit, OnDestroy {
     effect(() => {
       const carrinho = this.carrinho();
       if (
+        !this.pedidoConcluido() &&
         this.statusCarrinho() === 'success' &&
         carrinho &&
         (!carrinho.itens.length || !carrinho.podeFinalizar)
@@ -232,8 +234,10 @@ export class CheckoutPagina implements OnInit, OnDestroy {
     this.erroPedido409.set(false);
     this.pedidoService.criar(novoPedido).subscribe({
       next: (pedido) => {
-        this.carrinhoService.carregar();
-        void this.router.navigateByUrl(`/pedidos/${pedido.id}/confirmado`);
+        this.pedidoConcluido.set(true);
+        void this.router
+          .navigateByUrl(`/pedidos/${pedido.id}/confirmado`)
+          .finally(() => this.carrinhoService.carregar());
       },
       error: (falha: unknown) => {
         this.erro.set(mensagemDeErro(falha, 'Não foi possível confirmar o pedido.'));

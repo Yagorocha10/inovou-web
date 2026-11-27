@@ -395,13 +395,25 @@ describe('CheckoutPagina', () => {
     envio.complete();
   });
 
-  it('recarrega o carrinho e navega para a confirmação após sucesso', () => {
+  it('recarrega o carrinho e navega para a confirmação após sucesso', async () => {
     const pagina = abrir();
     irAtePagamento(pagina);
     (pagina.querySelector('.etapa-conteudo__acoes button.botao--primario') as HTMLButtonElement).click();
 
-    expect(carrinhoStub.carregar).toHaveBeenCalledOnce();
     expect(navegar).toHaveBeenCalledWith('/pedidos/123/confirmado');
+    await vi.waitFor(() => expect(carrinhoStub.carregar).toHaveBeenCalledOnce());
+  });
+
+  it('não volta para o carrinho quando ele esvazia logo depois do pedido', () => {
+    const pagina = abrir();
+    irAtePagamento(pagina);
+    (pagina.querySelector('.etapa-conteudo__acoes button.botao--primario') as HTMLButtonElement).click();
+
+    carrinhoAtual.set({ ...carrinhoDisponivel, itens: [], quantidadeTotal: 0, podeFinalizar: false });
+    TestBed.tick();
+
+    expect(navegar).toHaveBeenCalledWith('/pedidos/123/confirmado');
+    expect(navegar).not.toHaveBeenCalledWith('/carrinho');
   });
 
   it('mostra conflito 409 e oferece voltar ao carrinho', () => {
