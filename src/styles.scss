@@ -1,20 +1,21 @@
 @use '@angular/material' as mat;
 
 :root {
-  --inovou-navy: #0b2a5b;
-  --inovou-navy-light: #163c78;
-  --inovou-blue: #1a64d6;
-  --inovou-blue-soft: #e6eefb;
-  --inovou-bg: #f4f7fb;
+  --inovou-navy: #000e2b;
+  --inovou-navy-light: #0b1f4a;
+  --inovou-blue: #0050fd;
+  --inovou-blue-dark: #0037b8;
+  --inovou-blue-soft: #e5edff;
+  --inovou-bg: #f2f5fb;
   --inovou-surface: #ffffff;
-  --inovou-border: #dce3ee;
-  --inovou-text: #0f1b2d;
-  --inovou-text-muted: #5b6b82;
-  --inovou-text-on-dark: #c9d6ea;
+  --inovou-border: #d9e0ee;
+  --inovou-text: #0a1630;
+  --inovou-text-muted: #56647e;
+  --inovou-text-on-dark: #c3cee6;
   --inovou-radius: 12px;
-  --inovou-font-body: 'Inter', system-ui, sans-serif;
-  --inovou-font-title: 'Space Grotesk', 'Inter', sans-serif;
-  --inovou-container: 1200px;
+  --inovou-font-body: 'Archivo', system-ui, sans-serif;
+  --inovou-font-title: 'Archivo', system-ui, sans-serif;
+  --inovou-container: 1240px;
 }
 
 html {
@@ -26,8 +27,8 @@ html {
         tertiary: mat.$blue-palette,
       ),
       typography: (
-        plain-family: 'Inter',
-        brand-family: 'Space Grotesk',
+        plain-family: 'Archivo',
+        brand-family: 'Archivo',
       ),
       density: 0,
     )
@@ -47,7 +48,15 @@ h1,
 h2,
 h3 {
   font-family: var(--inovou-font-title);
+  font-stretch: 112%;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--inovou-navy);
+}
+
+:focus-visible {
+  outline: 3px solid var(--inovou-blue);
+  outline-offset: 2px;
 }
 
 a {
@@ -101,7 +110,7 @@ a:hover {
   color: #ffffff;
 
   &:hover:not(:disabled) {
-    background: var(--inovou-navy);
+    background: var(--inovou-blue-dark);
     color: #ffffff;
   }
 }
@@ -119,13 +128,29 @@ a:hover {
 
 .titulo-secao {
   margin: 0;
-  font-size: 26px;
+  font-size: clamp(22px, 2.4vw, 28px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .grade-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .grade-produtos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
 }
 
 .estado {

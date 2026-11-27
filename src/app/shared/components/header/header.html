@@ -1,15 +1,20 @@
 <div class="faixa-topo">
-  Entregamos em Belém e região · Pedidos também pelo WhatsApp (91) 8722-6520
+  <div class="container faixa-topo__linha">
+    <span class="faixa-topo__item">
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
+      Entrega rápida em Belém e região
+    </span>
+    <a class="faixa-topo__item" href="https://wa.me/559187226520" target="_blank" rel="noopener">
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
+      Atendimento no WhatsApp (91) 8722-6520
+    </a>
+  </div>
 </div>
 
 <header class="header">
   <div class="container header__linha">
     <a routerLink="/" class="logo" aria-label="Inovou Store, página inicial">
-      <span class="logo__selo">iv</span>
-      <span class="logo__texto">
-        <span class="logo__inovou">INOVOU</span>
-        <span class="logo__store">STORE</span>
-      </span>
+      <img src="logo-horizontal.png" alt="Inovou Store" width="1062" height="240" />
     </a>
 
     <form class="busca" role="search" (submit)="buscar($event, campoBusca.value)">
@@ -19,7 +24,7 @@
         id="busca"
         type="search"
         name="busca"
-        placeholder="O que você está procurando?"
+        placeholder="Buscar controles, carregadores, relógios..."
       />
       <button type="submit" aria-label="Buscar">
         <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
@@ -36,7 +41,10 @@
       @if (auth.logado()) {
         <a routerLink="/conta" class="acoes__link" aria-label="Minha conta">
           <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
-          <span class="acoes__texto">Olá, {{ auth.primeiroNome() }}</span>
+          <span class="acoes__texto">
+            <small>Olá, {{ auth.primeiroNome() }}</small>
+            Minha conta
+          </span>
         </a>
         <a routerLink="/pedidos" class="acoes__link" aria-label="Meus pedidos">
           <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">receipt_long</mat-icon>
@@ -45,33 +53,43 @@
       } @else {
         <a routerLink="/entrar" class="acoes__link">
           <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
-          <span class="acoes__texto">Entrar</span>
+          <span class="acoes__texto">
+            <small>Olá, visitante</small>
+            Entrar ou cadastrar
+          </span>
         </a>
       }
       <a
         routerLink="/carrinho"
-        class="acoes__link"
+        class="acoes__link acoes__link--carrinho"
         [attr.aria-label]="'Carrinho, ' + quantidadeCarrinho() + ' itens'"
       >
-        <mat-icon fontSet="material-symbols-outlined">shopping_cart</mat-icon>
+        <span class="acoes__icone">
+          <mat-icon fontSet="material-symbols-outlined">shopping_cart</mat-icon>
+          @if (quantidadeCarrinho() > 0) {
+            <span class="acoes__badge">{{ quantidadeCarrinho() }}</span>
+          }
+        </span>
         <span class="acoes__texto">Carrinho</span>
-        @if (quantidadeCarrinho() > 0) {
-          <span class="acoes__badge">{{ quantidadeCarrinho() }}</span>
-        }
       </a>
     </nav>
   </div>
 
-  <nav class="container categorias" aria-label="Categorias">
-    <a routerLink="/produtos" class="categorias__link">Todos os produtos</a>
-    @for (categoria of categorias(); track categoria.id) {
-      <a
-        routerLink="/produtos"
-        [queryParams]="{ categoria: categoria.slug }"
-        class="categorias__link"
-      >
-        {{ categoria.nome }}
+  <nav class="faixa-categorias" aria-label="Categorias">
+    <div class="container categorias">
+      <a routerLink="/produtos" class="categorias__link categorias__link--todos">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">menu</mat-icon>
+        Todos os produtos
       </a>
-    }
+      @for (categoria of categorias(); track categoria.id) {
+        <a
+          routerLink="/produtos"
+          [queryParams]="{ categoria: categoria.slug }"
+          class="categorias__link"
+        >
+          {{ categoria.nome }}
+        </a>
+      }
+    </div>
   </nav>
 </header>

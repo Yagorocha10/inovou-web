@@ -1,23 +1,65 @@
 <footer class="footer">
   <div class="container footer__colunas">
     <div class="footer__marca">
-      <span class="footer__nome">INOVOU STORE</span>
-      <p>Eletrônicos, games e acessórios com entrega em Belém e região.</p>
+      <img
+        src="logo-horizontal-claro.png"
+        alt="Inovou Store"
+        width="1062"
+        height="240"
+        loading="lazy"
+      />
+      <p>Eletrônicos, games, carregadores, relógios e ferramentas com entrega em Belém e região.</p>
     </div>
 
     <div class="footer__coluna">
-      <h2 class="footer__titulo">Atendimento</h2>
-      <a href="https://wa.me/559187226520" target="_blank" rel="noopener">
-        WhatsApp (91) 8722-6520
-      </a>
+      <h2 class="footer__titulo">Loja</h2>
+      <a routerLink="/produtos">Todos os produtos</a>
+      <a routerLink="/produtos" [queryParams]="{ categoria: 'games-e-controles' }"
+        >Games e controles</a
+      >
+      <a routerLink="/produtos" [queryParams]="{ categoria: 'carregadores-e-cabos' }"
+        >Carregadores e cabos</a
+      >
+      <a routerLink="/produtos" [queryParams]="{ categoria: 'eletronicos' }">Eletrônicos</a>
     </div>
 
     <div class="footer__coluna">
       <h2 class="footer__titulo">Minha conta</h2>
       <a routerLink="/conta">Meus dados e endereços</a>
+      <a routerLink="/pedidos">Meus pedidos</a>
       <a routerLink="/carrinho">Carrinho</a>
+    </div>
+
+    <div class="footer__coluna">
+      <h2 class="footer__titulo">Atendimento</h2>
+      <a href="https://wa.me/559187226520" target="_blank" rel="noopener"
+        >WhatsApp (91) 8722-6520</a
+      >
+      <span>Entregas em Belém e região metropolitana</span>
+      <div class="footer__pagamentos" aria-label="Formas de pagamento">
+        <span class="footer__pagamento">Pix</span>
+        <span class="footer__pagamento">Cartão</span>
+        <span class="footer__pagamento">Na entrega</span>
+      </div>
     </div>
   </div>
 
-  <div class="container footer__copy">© {{ anoAtual }} Inovou Store</div>
+  <div class="footer__copy">
+    <div class="container">© {{ anoAtual }} Inovou Store. Todos os direitos reservados.</div>
+  </div>
 </footer>
+
+<a
+  class="whatsapp-flutuante"
+  href="https://wa.me/559187226520"
+  target="_blank"
+  rel="noopener"
+  aria-label="Falar com a Inovou Store no WhatsApp"
+>
+  <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M16 3C9 3 3.4 8.6 3.4 15.5c0 2.4.7 4.7 1.9 6.7L3.3 29l7-1.9c1.9 1 4 1.6 6.2 1.6h.1c6.9 0 12.6-5.6 12.6-12.6C29.2 8.6 23 3 16 3zm0 23.4c-2 0-3.9-.5-5.6-1.5l-.4-.2-4.1 1.1 1.1-4-.3-.4c-1.1-1.7-1.6-3.8-1.6-5.8C5.1 9.6 10 4.8 16 4.8s10.9 4.8 10.9 10.8S22 26.4 16 26.4zm6-8.1c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7.2-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.8 1.1 3.4.9 4 .8.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"
+    />
+  </svg>
+</a>

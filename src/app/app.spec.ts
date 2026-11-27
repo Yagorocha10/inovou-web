@@ -33,7 +33,7 @@ describe('App', () => {
     await fixture.whenStable();
 
     const pagina = fixture.nativeElement as HTMLElement;
-    expect(pagina.querySelector('app-header .logo__inovou')?.textContent).toContain('INOVOU');
+    expect(pagina.querySelector('app-header .logo img')?.getAttribute('alt')).toBe('Inovou Store');
     expect(pagina.querySelector('.categorias')?.textContent).toContain('Relógios');
     expect(pagina.querySelector('app-footer')?.textContent).toContain('Inovou Store');
     http.verify();

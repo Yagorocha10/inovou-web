@@ -4,8 +4,7 @@
       @if (produto().imagemPrincipal; as imagem) {
         <img [src]="imagem" [alt]="produto().nome" loading="lazy" />
       } @else {
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">image</mat-icon>
-        <span>Foto do produto</span>
+        <img class="card__sem-foto" src="marca-iv.png" alt="" loading="lazy" />
       }
       @if (!produto().disponivel) {
         <span class="card__selo">Esgotado</span>
