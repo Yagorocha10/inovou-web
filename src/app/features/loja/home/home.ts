@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
+import { BannerCarrossel } from './banner-carrossel/banner-carrossel';
 import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { ProdutoService } from '../../../core/services/produto.service';
@@ -7,7 +9,7 @@ import { CardProduto } from '../../../shared/components/card-produto/card-produt
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CardProduto],
+  imports: [RouterLink, CardProduto, MatIconModule, BannerCarrossel],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -19,9 +21,26 @@ export class Home {
     stream: () => this.produtoService.destaques(8),
   });
 
+  protected readonly maisEmConta = rxResource({
+    stream: () => this.produtoService.buscar({ ordenacao: 'MENOR_PRECO', tamanho: 10 }),
+  });
+
   protected readonly categorias = rxResource({
     stream: () => this.categoriaService.listar(),
   });
 
   protected readonly esqueletos = [1, 2, 3, 4];
+
+  protected iconeDaCategoria(slug: string): string {
+    return ICONES_CATEGORIA[slug] ?? 'category';
+  }
 }
+
+const ICONES_CATEGORIA: Record<string, string> = {
+  eletronicos: 'devices',
+  'carregadores-e-cabos': 'cable',
+  'games-e-controles': 'sports_esports',
+  relogios: 'watch',
+  barbeadores: 'face',
+  ferramentas: 'construction',
+};

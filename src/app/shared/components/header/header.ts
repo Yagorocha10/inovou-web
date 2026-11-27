@@ -6,10 +6,11 @@ import { catchError, of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
+import { FaixaBeneficios } from '../faixa-beneficios/faixa-beneficios';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, MatIconModule],
+  imports: [RouterLink, MatIconModule, FaixaBeneficios],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

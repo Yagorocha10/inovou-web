@@ -1,41 +1,36 @@
 .footer {
+  margin-top: 56px;
   background: var(--inovou-navy);
   color: var(--inovou-text-on-dark);
-  margin-top: 48px;
+  font-size: 14px;
 }
 
 .footer__colunas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 40px;
-  padding-top: 40px;
-  padding-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: 32px;
+  padding-top: 44px;
+  padding-bottom: 36px;
 }
 
 .footer__marca {
-  max-width: 320px;
+  img {
+    height: 40px;
+    width: auto;
+  }
 
   p {
-    margin: 8px 0 0;
-    font-size: 14px;
-    line-height: 1.5;
+    max-width: 34ch;
+    line-height: 1.55;
+    margin: 16px 0 0;
   }
-}
-
-.footer__nome {
-  font-family: var(--inovou-font-title);
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: 0.04em;
-  color: #ffffff;
 }
 
 .footer__coluna {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
+  align-items: flex-start;
+  gap: 10px;
 
   a {
     color: var(--inovou-text-on-dark);
@@ -43,21 +38,81 @@
 
     &:hover {
       color: #ffffff;
+      text-decoration: underline;
     }
   }
 }
 
 .footer__titulo {
   margin: 0 0 4px;
-  font-family: var(--inovou-font-body);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-stretch: 100%;
   color: #ffffff;
 }
 
+.footer__pagamentos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.footer__pagamento {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .footer__copy {
-  border-top: 1px solid var(--inovou-navy-light);
-  padding-top: 16px;
-  padding-bottom: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 0;
   font-size: 13px;
+  color: #8fa0c2;
+}
+
+.whatsapp-flutuante {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 30;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #25d366;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 14, 43, 0.28);
+
+  &:hover {
+    background: #1ebe5a;
+    color: #ffffff;
+  }
+}
+
+@media (max-width: 860px) {
+  .footer__colunas {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__marca {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .footer__colunas {
+    grid-template-columns: 1fr;
+  }
+
+  .whatsapp-flutuante {
+    right: 14px;
+    bottom: 14px;
+    width: 52px;
+    height: 52px;
+  }
 }

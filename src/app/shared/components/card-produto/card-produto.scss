@@ -1,18 +1,24 @@
+:host {
+  display: block;
+}
+
 .card {
-  background: var(--inovou-surface);
-  border: 1px solid var(--inovou-border);
-  border-radius: 16px;
-  overflow: hidden;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.15s ease;
+  background: var(--inovou-surface);
+  border: 1px solid var(--inovou-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(11, 42, 91, 0.08);
+    border-color: var(--inovou-blue);
   }
 }
 
 .card__link {
+  flex: 1;
   display: flex;
   flex-direction: column;
   color: inherit;
@@ -22,76 +28,122 @@
 .card__imagem {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #eef2f8;
-  color: #6b7a8f;
-  font-size: 13px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid var(--inovou-border);
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 14px;
+    box-sizing: border-box;
   }
+}
 
-  mat-icon {
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
-  }
+.card__sem-foto {
+  max-width: 38%;
+  max-height: 42%;
+  opacity: 0.14;
 }
 
 .card__selo {
   position: absolute;
   top: 12px;
   left: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
   background: var(--inovou-navy);
   color: #ffffff;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 999px;
 }
 
 .card__corpo {
-  padding: 16px 16px 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  padding: 14px 16px 6px;
 }
 
 .card__categoria {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--inovou-blue);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--inovou-text-muted);
 }
 
 .card__nome {
   margin: 0;
-  font-family: var(--inovou-font-body);
   font-size: 15px;
   font-weight: 600;
+  font-stretch: 100%;
   line-height: 1.35;
   color: var(--inovou-text);
-  min-height: 40px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.7em;
 }
 
 .card__preco {
-  font-family: var(--inovou-font-title);
+  align-self: flex-start;
+  padding: 0 4px;
+  margin-left: -4px;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
+  font-stretch: 110%;
   color: var(--inovou-navy);
+  background: linear-gradient(
+    transparent 56%,
+    var(--inovou-yellow) 56%,
+    var(--inovou-yellow) 92%,
+    transparent 92%
+  );
 }
 
 .card__acao {
-  margin: 12px 16px 16px;
+  margin: 10px 16px 16px;
 }
 
-.card--esgotado .card__preco {
-  color: var(--inovou-text-muted);
+.card--esgotado {
+  .card__imagem img:not(.card__sem-foto) {
+    opacity: 0.45;
+  }
+
+  .card__preco {
+    color: var(--inovou-text-muted);
+    background: none;
+  }
+
+  .card__acao {
+    background: var(--inovou-surface);
+    border-color: var(--inovou-border);
+    color: var(--inovou-text);
+  }
+}
+
+@media (max-width: 600px) {
+  .card__imagem img {
+    padding: 8px;
+  }
+
+  .card__corpo {
+    padding: 10px 10px 4px;
+  }
+
+  .card__nome {
+    font-size: 13px;
+  }
+
+  .card__preco {
+    font-size: 17px;
+  }
+
+  .card__acao {
+    margin: 8px 10px 10px;
+    min-height: 38px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
 }

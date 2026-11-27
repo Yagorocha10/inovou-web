@@ -1,0 +1,64 @@
+:host {
+  display: block;
+}
+
+.faixa {
+  overflow: hidden;
+  background: var(--inovou-yellow);
+  color: var(--inovou-navy);
+}
+
+.faixa__trilho {
+  display: flex;
+  width: max-content;
+  animation: rolar 45s linear infinite;
+}
+
+.faixa:hover .faixa__trilho {
+  animation-play-state: paused;
+}
+
+.faixa__lista {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faixa__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@keyframes rolar {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faixa__trilho {
+    width: auto;
+    animation: none;
+    overflow-x: auto;
+  }
+
+  .faixa__lista--copia {
+    display: none;
+  }
+}
