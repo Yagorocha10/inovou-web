@@ -37,6 +37,7 @@ export class DetalheProduto {
   protected readonly imagemSelecionada = signal(0);
   protected readonly quantidade = signal(1);
   protected readonly adicionando = signal(false);
+  protected readonly comprando = signal(false);
 
   protected readonly naoEncontrado = computed(() => {
     const erro = this.produto.error() as { cause?: unknown } | undefined;
@@ -67,15 +68,11 @@ export class DetalheProduto {
   }
 
   protected adicionarAoCarrinho(): void {
-    if (!this.auth.logado()) {
-      this.router.navigate(['/entrar'], { queryParams: { retorno: `/produtos/${this.slug()}` } });
-      return;
-    }
-    if (!this.produto.hasValue()) {
+    if (!this.podeComprar()) {
       return;
     }
     this.adicionando.set(true);
-    this.carrinho.adicionar(this.produto.value().id, this.quantidade()).subscribe({
+    this.carrinho.adicionar(this.produto.value()!.id, this.quantidade()).subscribe({
       next: () => {
         this.adicionando.set(false);
         this.snackBar
@@ -85,10 +82,37 @@ export class DetalheProduto {
       },
       error: (falha: unknown) => {
         this.adicionando.set(false);
-        this.snackBar.open(mensagemDeErro(falha, 'Não foi possível adicionar ao carrinho.'), 'OK', {
-          duration: 5000,
-        });
+        this.avisarErro(falha, 'Não foi possível adicionar ao carrinho.');
       },
     });
+  }
+
+  protected comprarAgora(): void {
+    if (!this.podeComprar()) {
+      return;
+    }
+    this.comprando.set(true);
+    this.carrinho.adicionar(this.produto.value()!.id, this.quantidade()).subscribe({
+      next: () => {
+        this.comprando.set(false);
+        this.router.navigate(['/checkout']);
+      },
+      error: (falha: unknown) => {
+        this.comprando.set(false);
+        this.avisarErro(falha, 'Não foi possível iniciar a compra.');
+      },
+    });
+  }
+
+  private podeComprar(): boolean {
+    if (!this.auth.logado()) {
+      this.router.navigate(['/entrar'], { queryParams: { retorno: `/produtos/${this.slug()}` } });
+      return false;
+    }
+    return this.produto.hasValue();
+  }
+
+  private avisarErro(falha: unknown, padrao: string): void {
+    this.snackBar.open(mensagemDeErro(falha, padrao), 'OK', { duration: 5000 });
   }
 }

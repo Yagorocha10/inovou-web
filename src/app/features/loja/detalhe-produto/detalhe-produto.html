@@ -86,7 +86,15 @@
             <button
               type="button"
               class="botao botao--primario compra__botao"
-              [disabled]="adicionando()"
+              [disabled]="comprando() || adicionando()"
+              (click)="comprarAgora()"
+            >
+              {{ comprando() ? 'Indo para o checkout...' : 'Comprar agora' }}
+            </button>
+            <button
+              type="button"
+              class="botao botao--secundario compra__botao"
+              [disabled]="comprando() || adicionando()"
               (click)="adicionarAoCarrinho()"
             >
               {{ adicionando() ? 'Adicionando...' : 'Adicionar ao carrinho' }}
