@@ -1,0 +1,149 @@
+<main class="pagina-admin-detalhe-pedido" aria-labelledby="titulo-detalhe-pedido">
+  @if (recarregandoAposConflito() && !erroRecargaAposConflito()) {
+    <section class="estado" role="status" aria-live="polite">
+      <strong>O pedido mudou no servidor.</strong>
+      <span>Carregando o estado atual do pedido. Os dados anteriores foram ocultados.</span>
+    </section>
+  } @else if (recarregandoAposConflito() && erroRecargaAposConflito(); as erroRecarga) {
+    <section class="estado" role="alert">
+      <strong>Não foi possível atualizar os dados do pedido.</strong>
+      <span>O pedido mudou no servidor, mas a recarga falhou. Os dados anteriores não estão sendo exibidos como atuais.</span>
+      <span>{{ erroRecarga }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarNovamente()">
+        Tentar carregar novamente
+      </button>
+      <a class="botao botao--secundario" routerLink="/admin/pedidos">Voltar à listagem</a>
+    </section>
+  } @else if (id() === null || naoEncontrado()) {
+    <section class="estado" role="status">
+      <strong>Pedido não encontrado.</strong>
+      <a class="botao botao--secundario" routerLink="/admin/pedidos">Voltar à listagem</a>
+    </section>
+  } @else if (pedido(); as atual) {
+    @if (pedidoResource.isLoading()) {
+      <p class="alerta alerta--aviso" role="status" aria-live="polite">Atualizando os dados do pedido...</p>
+    }
+    @if (feedback(); as aviso) {
+      <p class="alerta" [class.alerta--sucesso]="aviso.tipo === 'sucesso'" [attr.role]="aviso.tipo === 'erro' ? 'alert' : 'status'">
+        {{ aviso.mensagem }}
+      </p>
+    }
+
+    <header class="cabecalho-detalhe">
+      <a class="voltar" routerLink="/admin/pedidos">← Voltar para pedidos</a>
+      <div class="cabecalho-detalhe__linha">
+        <div>
+          <p class="sobrelinha">Detalhes do pedido</p>
+          <h1 id="titulo-detalhe-pedido">{{ atual.codigo }}</h1>
+          <p class="data-pedido">Criado em {{ atual.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <span class="status" [class]="'status ' + classeStatus(atual.status)">
+          {{ rotuloStatus(atual.status) }}
+        </span>
+      </div>
+    </header>
+
+    <div class="colunas-pedido">
+      <div class="conteudo-pedido">
+        <section class="cartao" aria-labelledby="titulo-cliente">
+          <h2 id="titulo-cliente">Cliente</h2>
+          <p class="cliente-nome">{{ atual.cliente.nome }}</p>
+          <a class="cliente-email" [href]="'mailto:' + atual.cliente.email">{{ atual.cliente.email }}</a>
+        </section>
+
+        <section class="cartao" aria-labelledby="titulo-itens-pedido">
+          <h2 id="titulo-itens-pedido">Produtos</h2>
+          @if (atual.itens.length === 0) {
+            <p class="texto-muted">Este pedido não possui itens.</p>
+          } @else {
+            <ul class="lista-itens">
+              @for (item of atual.itens; track item.produtoId) {
+                <li class="item-pedido">
+                  @if (item.imagem) {
+                    <img [src]="item.imagem" [alt]="item.nome" />
+                  } @else {
+                    <div class="imagem-vazia" aria-hidden="true"></div>
+                  }
+                  <div class="item-pedido__descricao">
+                    <strong>{{ item.nome }}</strong>
+                    <span>{{ item.quantidade }} × {{ item.precoUnitario | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+                  </div>
+                  <strong class="item-subtotal">{{ item.subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section class="cartao" aria-labelledby="titulo-endereco">
+          <h2 id="titulo-endereco">Endereço de entrega</h2>
+          <address>
+            {{ atual.endereco.logradouro }}, {{ atual.endereco.numero }}
+            @if (atual.endereco.complemento) { · {{ atual.endereco.complemento }} }
+            <br />{{ atual.endereco.bairro }} · {{ atual.endereco.cidade }}/{{ atual.endereco.uf }}
+            <br />CEP {{ atual.endereco.cep }}
+          </address>
+        </section>
+
+        <section class="cartao pagamento" aria-labelledby="titulo-pagamento">
+          <h2 id="titulo-pagamento">Pagamento</h2>
+          <p>{{ formaPagamento(atual.pagamento.forma) }}</p>
+          @if (atual.pagamento.instrucoes) {
+            <p class="texto-muted">{{ atual.pagamento.instrucoes }}</p>
+          }
+        </section>
+      </div>
+
+      <aside class="coluna-lateral">
+        <section class="cartao resumo" aria-labelledby="titulo-resumo-pedido">
+          <h2 id="titulo-resumo-pedido">Resumo financeiro</h2>
+          <div class="resumo__linha"><span>Subtotal</span><span>{{ atual.subtotal | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span></div>
+          <div class="resumo__linha"><span>Frete</span><span>{{ atual.frete | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span></div>
+          <div class="resumo__linha resumo__linha--total"><strong>Total</strong><strong>{{ atual.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong></div>
+        </section>
+
+        <section class="cartao acoes-status" aria-labelledby="titulo-acoes-status">
+          <h2 id="titulo-acoes-status">Atualizar status</h2>
+          @if (proximosStatusSemCancelamento().length === 0 && !podeCancelar()) {
+            <p class="texto-muted">Não há próximas ações disponíveis para este pedido.</p>
+          }
+          @for (status of proximosStatusSemCancelamento(); track status) {
+            <button
+              class="botao botao--secundario botao-acao-status"
+              type="button"
+              [disabled]="statusEmAtualizacao() !== null"
+              (click)="atualizarStatus(status)"
+            >
+              {{ statusEmAtualizacao() === status ? 'Atualizando...' : 'Marcar como ' + rotuloStatus(status) }}
+            </button>
+          }
+          @if (podeCancelar()) {
+            <div class="separador-cancelamento">
+              <h3>Cancelamento</h3>
+              <p>Esta ação cancela o pedido e não pode ser desfeita.</p>
+              <button
+                class="botao botao--perigo botao-acao-status"
+                type="button"
+                [disabled]="statusEmAtualizacao() !== null"
+                (click)="atualizarStatus('CANCELADO')"
+              >
+                {{ statusEmAtualizacao() === 'CANCELADO' ? 'Cancelando...' : 'Cancelar pedido' }}
+              </button>
+            </div>
+          }
+        </section>
+      </aside>
+    </div>
+  } @else if (pedidoResource.isLoading()) {
+    <section class="estado" role="status" aria-live="polite">
+      <strong>Carregando os dados do pedido...</strong>
+    </section>
+  } @else if (pedidoResource.error()) {
+    <section class="estado" role="alert">
+      <strong>Não foi possível carregar o pedido.</strong>
+      <span>{{ erroCarregamento() }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarNovamente()">Tentar novamente</button>
+      <a class="botao botao--secundario" routerLink="/admin/pedidos">Voltar à listagem</a>
+    </section>
+  }
+</main>

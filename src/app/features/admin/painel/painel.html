@@ -1,0 +1,114 @@
+<section class="painel-admin" aria-labelledby="titulo-painel-admin">
+  <header class="cabecalho">
+    <div>
+      <p class="sobrelinha">Visão geral</p>
+      <h1 id="titulo-painel-admin" class="titulo-secao">Painel administrativo</h1>
+      <p class="subtitulo">Acompanhe os indicadores da loja e acesse as tarefas administrativas.</p>
+    </div>
+  </header>
+
+  <nav class="atalhos" aria-label="Atalhos administrativos">
+    <a class="atalho" routerLink="/admin/produtos">
+      <span class="atalho__icone" aria-hidden="true">▦</span>
+      <span><strong>Produtos</strong><small>Ver e gerenciar produtos</small></span>
+      <span class="atalho__seta" aria-hidden="true">›</span>
+    </a>
+    <a class="atalho" routerLink="/admin/produtos/novo">
+      <span class="atalho__icone" aria-hidden="true">＋</span>
+      <span><strong>Cadastrar produto</strong><small>Adicionar um produto à loja</small></span>
+      <span class="atalho__seta" aria-hidden="true">›</span>
+    </a>
+    <a class="atalho" routerLink="/admin/pedidos">
+      <span class="atalho__icone" aria-hidden="true">▤</span>
+      <span><strong>Pedidos</strong><small>Ver e acompanhar pedidos</small></span>
+      <span class="atalho__seta" aria-hidden="true">›</span>
+    </a>
+  </nav>
+
+  @if (resumo.isLoading() && !resumo.hasValue()) {
+    <div class="estado" role="status" aria-live="polite">Carregando os indicadores...</div>
+  } @else if (resumo.error()) {
+    <div class="estado" role="alert">
+      <strong>Não foi possível carregar o painel.</strong>
+      <span>{{ erroCarregamento() }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarNovamente()">
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (resumo.hasValue()) {
+    @if (resumo.isLoading()) {
+      <p class="aviso-atualizacao" role="status" aria-live="polite">Atualizando indicadores...</p>
+    }
+
+    <section class="indicadores" aria-label="Indicadores da loja">
+      <article class="indicador indicador--pedidos">
+        <span class="indicador__rotulo">Pedidos hoje</span>
+        <strong class="indicador__valor">{{ resumo.value().pedidosHoje }}</strong>
+        <span class="indicador__detalhe">Pedidos recebidos hoje</span>
+      </article>
+      <article class="indicador indicador--faturamento">
+        <span class="indicador__rotulo">Faturamento hoje</span>
+        <strong class="indicador__valor">{{ resumo.value().faturamentoHoje | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</strong>
+        <span class="indicador__detalhe">Total informado pela API</span>
+      </article>
+      <article class="indicador indicador--preparar">
+        <span class="indicador__rotulo">Pedidos para preparar</span>
+        <strong class="indicador__valor">{{ resumo.value().pedidosParaPreparar }}</strong>
+        <span class="indicador__detalhe">Aguardando preparação</span>
+      </article>
+      <article class="indicador indicador--estoque">
+        <span class="indicador__rotulo">Produtos sem estoque</span>
+        <strong class="indicador__valor">{{ resumo.value().produtosSemEstoque }}</strong>
+        <span class="indicador__detalhe">Produtos com estoque zerado</span>
+      </article>
+    </section>
+
+    <section class="ultimos-pedidos cartao" aria-labelledby="titulo-ultimos-pedidos">
+      <header class="secao-cabecalho">
+        <div>
+          <p class="sobrelinha">Acompanhe a atividade</p>
+          <h2 id="titulo-ultimos-pedidos">Últimos pedidos</h2>
+        </div>
+        <a class="acao-link" routerLink="/admin/pedidos">Ver todos os pedidos</a>
+      </header>
+
+      @if (resumo.value().ultimosPedidos.length === 0) {
+        <div class="estado estado--vazio">
+          <strong>Nenhum pedido recente.</strong>
+          <span>Quando novos pedidos chegarem, eles aparecerão aqui.</span>
+        </div>
+      } @else {
+        <div class="tabela-wrap">
+          <table class="tabela-pedidos">
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Data</th>
+                <th scope="col">Status</th>
+                <th scope="col">Total</th>
+                <th scope="col"><span class="visually-hidden">Ação</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (pedido of resumo.value().ultimosPedidos; track pedido.id) {
+                <tr>
+                  <td data-label="Código"><strong>{{ pedido.codigo }}</strong></td>
+                  <td data-label="Cliente">{{ pedido.cliente.nome }}</td>
+                  <td data-label="Data"><time [attr.datetime]="pedido.criadoEm">{{ pedido.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</time></td>
+                  <td data-label="Status">
+                    <span class="status" [class]="'status ' + classeStatus(pedido.status)">
+                      {{ rotuloStatus(pedido.status) }}
+                    </span>
+                  </td>
+                  <td data-label="Total">{{ pedido.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+                  <td data-label="Ação"><a class="acao-link" [routerLink]="['/admin/pedidos', pedido.id]">Ver detalhes</a></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</section>

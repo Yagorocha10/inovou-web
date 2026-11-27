@@ -1,0 +1,109 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.admin {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--inovou-bg);
+}
+
+.admin__barra {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px 18px;
+  background: var(--inovou-navy);
+  color: #fff;
+}
+
+.admin__marca {
+  color: #fff;
+  font-family: var(--inovou-font-title);
+  font-size: 21px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin__marca span {
+  color: #a9c8ff;
+}
+
+.admin__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin__nav a,
+.admin__loja {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 9px;
+  color: #e3ebf8;
+  text-decoration: none;
+}
+
+.admin__nav a:hover,
+.admin__nav a.admin__link--ativo {
+  background: #ffffff1a;
+  color: #fff;
+}
+
+.admin__loja {
+  margin-top: auto;
+  border: 1px solid #ffffff40;
+}
+
+.admin__principal {
+  min-width: 0;
+}
+
+.admin__topo {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--inovou-border);
+  background: var(--inovou-surface);
+  color: var(--inovou-text-muted);
+}
+
+.admin__conteudo {
+  padding: 32px;
+}
+
+@media (max-width: 720px) {
+  .admin {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__barra {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .admin__nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .admin__nav a {
+    white-space: nowrap;
+  }
+
+  .admin__loja {
+    margin-top: 0;
+  }
+
+  .admin__topo {
+    min-height: 56px;
+    padding: 0 18px;
+  }
+
+  .admin__conteudo {
+    padding: 20px 16px;
+  }
+}

@@ -1,5 +1,9 @@
-<app-header />
-<main class="container conteudo">
+@if (!emAdmin()) {
+  <app-header />
+}
+<main [class.container]="!emAdmin()" [class.conteudo]="!emAdmin()" [class.conteudo-admin]="emAdmin()">
   <router-outlet />
 </main>
-<app-footer />
+@if (!emAdmin()) {
+  <app-footer />
+}

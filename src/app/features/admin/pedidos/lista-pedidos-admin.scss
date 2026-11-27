@@ -1,0 +1,253 @@
+.pagina-admin-pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cabecalho h1 {
+  margin: 0;
+}
+
+.cabecalho__total {
+  margin: 6px 0 0;
+  color: var(--inovou-text-muted);
+  font-size: 14px;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: minmax(240px, 2fr) minmax(200px, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--inovou-border);
+  border-radius: var(--inovou-radius);
+  background: var(--inovou-surface);
+}
+
+.campo select {
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--inovou-border);
+  border-radius: 10px;
+  background: var(--inovou-surface);
+  color: var(--inovou-text);
+  font: inherit;
+}
+
+.tabela-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--inovou-border);
+  border-radius: var(--inovou-radius);
+  background: var(--inovou-surface);
+}
+
+.tabela-pedidos {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabela-pedidos th,
+.tabela-pedidos td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--inovou-border);
+  vertical-align: middle;
+}
+
+.tabela-pedidos th {
+  color: var(--inovou-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tabela-pedidos tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.codigo-pedido {
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.cliente-pedido {
+  min-width: 190px;
+}
+
+.cliente-pedido strong,
+.cliente-pedido span {
+  display: block;
+}
+
+.cliente-pedido span {
+  margin-top: 3px;
+  color: var(--inovou-text-muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.status {
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.status--aguardando-pagamento {
+  background: #fff2d6;
+  color: #805500;
+}
+
+.status--pago {
+  background: #e7f5ec;
+  color: #176b36;
+}
+
+.status--em-separacao {
+  background: #e8efff;
+  color: #234c9b;
+}
+
+.status--saiu-para-entrega {
+  background: #e9f7f8;
+  color: #14656b;
+}
+
+.status--entregue {
+  background: #e7f5ec;
+  color: #176b36;
+}
+
+.status--cancelado {
+  background: #fdf0ef;
+  color: #8c1d18;
+}
+
+.acao-link {
+  color: var(--inovou-blue);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.acao-link:hover {
+  color: var(--inovou-navy);
+  text-decoration: underline;
+}
+
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+  border: 1px dashed var(--inovou-border);
+  border-radius: var(--inovou-radius);
+  background: var(--inovou-surface);
+  color: var(--inovou-text-muted);
+  text-align: center;
+}
+
+.estado strong {
+  color: var(--inovou-text);
+}
+
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--inovou-text-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 720px) {
+  .cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .tabela-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .tabela-pedidos,
+  .tabela-pedidos tbody,
+  .tabela-pedidos tr,
+  .tabela-pedidos td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .tabela-pedidos thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .tabela-pedidos tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  .tabela-pedidos tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--inovou-border);
+    border-radius: var(--inovou-radius);
+    background: var(--inovou-surface);
+  }
+
+  .tabela-pedidos td {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-bottom: 1px solid var(--inovou-border);
+    overflow-wrap: anywhere;
+  }
+
+  .tabela-pedidos td::before {
+    color: var(--inovou-text-muted);
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .tabela-pedidos td.cliente-pedido {
+    grid-column: 1 / -1;
+  }
+
+  .tabela-pedidos tr td:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+
+  .paginacao {
+    gap: 8px;
+    justify-content: space-between;
+  }
+}

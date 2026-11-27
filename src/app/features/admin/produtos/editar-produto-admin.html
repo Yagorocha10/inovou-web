@@ -1,0 +1,177 @@
+<section class="pagina-admin-editar-produto" aria-labelledby="titulo-editar-produto">
+  @if (cadastroConfirmado) {
+    <p class="alerta alerta--sucesso" role="status">Produto cadastrado com sucesso.</p>
+  }
+  @if (id() === null || produtoResource.error() && produtoNaoEncontrado()) {
+    <div class="estado" role="status">
+      <strong>Produto não encontrado.</strong>
+      <a class="botao botao--secundario" routerLink="/admin/produtos">Voltar à listagem</a>
+    </div>
+  } @else if (produtoResource.error()) {
+    <div class="estado" role="alert">
+      <strong>Não foi possível carregar o produto.</strong>
+      <span>{{ mensagemDaFalha(produtoResource.error(), 'Tente carregar o produto novamente.') }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarCarregarNovamente()">
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (produtoResource.isLoading() || !produtoResource.hasValue()) {
+    <div class="estado" role="status" aria-live="polite">Carregando produto...</div>
+  } @else if (produto(); as item) {
+    <header class="cabecalho">
+      <div>
+        <h1 id="titulo-editar-produto" class="titulo-secao">Editar produto</h1>
+        <p class="subtitulo">{{ item.nome }}</p>
+      </div>
+      <a class="botao botao--secundario" routerLink="/admin/produtos">Voltar à listagem</a>
+    </header>
+
+    @if (erro(); as mensagem) {
+      <p class="alerta" role="alert">{{ mensagem }}</p>
+    }
+    @if (feedback(); as mensagem) {
+      <p class="alerta alerta--sucesso" role="status">{{ mensagem }}</p>
+    }
+
+    @if (categorias.isLoading()) {
+      <p class="estado" role="status">Carregando categorias...</p>
+    } @else if (categorias.error()) {
+      <div class="estado" role="alert">
+        <span>Não foi possível carregar as categorias.</span>
+        <button class="botao botao--secundario" type="button" (click)="tentarCarregarCategoriasNovamente()">
+          Tentar novamente
+        </button>
+      </div>
+    } @else if (categorias.hasValue()) {
+      <form class="formulario-admin" [formGroup]="formulario" (ngSubmit)="salvar()" novalidate>
+        <label class="campo">
+          <span>Nome</span>
+          <input type="text" formControlName="nome" maxlength="150" autocomplete="off" />
+          @if (campoInvalido('nome')) {
+            <small class="campo__erro">{{ erroDoCampo('nome') }}</small>
+          } @else if (erroServidor('nome'); as mensagem) {
+            <small class="campo__erro">{{ mensagem }}</small>
+          }
+        </label>
+
+        <label class="campo">
+          <span>Descrição</span>
+          <textarea formControlName="descricao" maxlength="2000" rows="5"></textarea>
+          @if (campoInvalido('descricao')) {
+            <small class="campo__erro">{{ erroDoCampo('descricao') }}</small>
+          } @else if (erroServidor('descricao'); as mensagem) {
+            <small class="campo__erro">{{ mensagem }}</small>
+          }
+        </label>
+
+        <div class="grade-campos">
+          <label class="campo">
+            <span>Preço (R$)</span>
+            <input type="number" formControlName="preco" min="0.01" step="0.01" />
+            @if (campoInvalido('preco')) {
+              <small class="campo__erro">{{ erroDoCampo('preco') }}</small>
+            } @else if (erroServidor('preco'); as mensagem) {
+              <small class="campo__erro">{{ mensagem }}</small>
+            }
+          </label>
+
+          <label class="campo">
+            <span>Estoque</span>
+            <input type="number" formControlName="estoque" min="0" step="1" />
+            @if (campoInvalido('estoque')) {
+              <small class="campo__erro">{{ erroDoCampo('estoque') }}</small>
+            } @else if (erroServidor('estoque'); as mensagem) {
+              <small class="campo__erro">{{ mensagem }}</small>
+            }
+          </label>
+        </div>
+
+        <label class="campo">
+          <span>Categoria</span>
+          <select formControlName="categoriaId">
+            <option [ngValue]="null">Selecione uma categoria</option>
+            @for (categoria of categorias.value(); track categoria.id) {
+              <option [ngValue]="categoria.id">{{ categoria.nome }}</option>
+            }
+          </select>
+          @if (campoInvalido('categoriaId')) {
+            <small class="campo__erro">{{ erroDoCampo('categoriaId') }}</small>
+          } @else if (erroServidor('categoriaId'); as mensagem) {
+            <small class="campo__erro">{{ mensagem }}</small>
+          }
+        </label>
+
+        <label class="opcao-ativo">
+          <input type="checkbox" formControlName="ativo" />
+          Produto ativo
+        </label>
+
+        <div class="acoes-formulario">
+          <a class="botao botao--secundario" routerLink="/admin/produtos">Cancelar</a>
+          <button class="botao botao--primario" type="submit" [disabled]="galeriaOcupada()">
+            {{ salvando() ? 'Salvando alterações...' : 'Salvar alterações' }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <section class="galeria" aria-labelledby="titulo-galeria">
+      <div class="galeria__cabecalho">
+        <div>
+          <h2 id="titulo-galeria">Imagens do produto</h2>
+          <p>{{ item.imagens.length }} de 8 imagens</p>
+        </div>
+        <label class="botao botao--secundario seletor-imagens">
+          Adicionar imagens
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+            multiple
+            [disabled]="galeriaOcupada() || item.imagens.length + filaUpload().length + (enviandoImagens() ? 1 : 0) >= 8"
+            (change)="selecionarArquivos($event)"
+          />
+        </label>
+      </div>
+
+      <p class="dica">JPG, PNG ou WEBP, até 5 MB por arquivo. Máximo de 8 imagens.</p>
+      @if (principal(); as imagemPrincipal) {
+        <p class="imagem-principal-atual">Imagem principal: {{ imagemPrincipal.url }}</p>
+      }
+      @if (erroGaleria(); as mensagem) {
+        <p class="alerta" role="alert">{{ mensagem }}</p>
+      }
+      @if (arquivoEmEnvio(); as nomeArquivo) {
+        <div class="progresso-upload" role="status" aria-live="polite">
+          <span>Enviando {{ nomeArquivo }} — {{ progressoUpload() }}%</span>
+          <progress [value]="progressoUpload()" max="100">{{ progressoUpload() }}%</progress>
+        </div>
+      }
+      @if (filaUpload().length > 0) {
+        <p class="dica">{{ filaUpload().length }} imagem(ns) aguardando envio sequencial.</p>
+      }
+
+      @if (imagensOrdenadas().length === 0) {
+        <p class="estado">Este produto ainda não tem imagens.</p>
+      } @else {
+        <ol class="grade-imagens">
+          @for (imagem of imagensOrdenadas(); track imagem.id; let indice = $index) {
+            <li class="imagem-card">
+              <img [src]="imagem.url" [alt]="item.nome + ' — imagem ' + (indice + 1)" />
+              <div class="imagem-card__info">
+                <strong>Ordem {{ imagem.ordem + 1 }}</strong>
+                @if (imagem.ordem === 0) {
+                  <span class="selo-principal">Principal</span>
+                }
+              </div>
+              <div class="imagem-card__acoes">
+                <button type="button" class="botao botao--secundario" [disabled]="galeriaOcupada() || indice === 0" (click)="moverImagem(indice, -1)">Mover para cima</button>
+                <button type="button" class="botao botao--secundario" [disabled]="galeriaOcupada() || indice === imagensOrdenadas().length - 1" (click)="moverImagem(indice, 1)">Mover para baixo</button>
+                <button type="button" class="botao botao--perigo" [disabled]="galeriaOcupada()" (click)="removerImagem(imagem)">Remover imagem</button>
+              </div>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+  }
+</section>

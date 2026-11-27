@@ -1,0 +1,120 @@
+<section class="pagina-admin-pedidos" aria-labelledby="titulo-pedidos-admin">
+  <header class="cabecalho">
+    <div>
+      <h1 id="titulo-pedidos-admin" class="titulo-secao">Pedidos</h1>
+      @if (pedidos.hasValue()) {
+        <p class="cabecalho__total">
+          {{ pedidos.value().totalItens }}
+          {{ pedidos.value().totalItens === 1 ? 'pedido encontrado' : 'pedidos encontrados' }}
+        </p>
+      }
+    </div>
+  </header>
+
+  <div class="filtros" aria-label="Filtros de pedidos">
+    <label class="campo filtro-busca">
+      Buscar por código, nome ou e-mail
+      <input type="search" [formControl]="busca" placeholder="Digite um código ou dado do cliente" />
+    </label>
+
+    <label class="campo">
+      Status
+      <select [formControl]="statusControl" (change)="alterarStatus($any($event.target).value)">
+        <option value="">Todos os status</option>
+        @for (status of statusDisponiveis; track status) {
+          <option [value]="status">{{ rotuloStatus(status) }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if (pedidos.isLoading()) {
+    <div class="estado" role="status" aria-live="polite">Carregando pedidos...</div>
+  } @else if (pedidos.error()) {
+    <div class="estado" role="alert">
+      <strong>Falha ao carregar pedidos.</strong>
+      <span>{{ erroCarregamento() }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarNovamente()">
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (pedidos.hasValue()) {
+    @if (paginaForaDoIntervalo()) {
+      <div class="estado" role="status" aria-live="polite">
+        <strong>A página solicitada não contém pedidos.</strong>
+        <span>Ajustando para uma página válida...</span>
+      </div>
+    } @else if (itens().length > 0) {
+      <div class="tabela-wrap">
+        <table class="tabela-pedidos">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Criado em</th>
+              <th scope="col">Pagamento</th>
+              <th scope="col">Itens</th>
+              <th scope="col">Total</th>
+              <th scope="col">Status</th>
+              <th scope="col"><span class="visually-hidden">Ação</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pedido of itens(); track pedido.id) {
+              <tr>
+                <td data-label="Código" class="codigo-pedido">{{ pedido.codigo }}</td>
+                <td data-label="Cliente" class="cliente-pedido">
+                  <strong>{{ pedido.cliente.nome }}</strong>
+                  <span>{{ pedido.cliente.email }}</span>
+                </td>
+                <td data-label="Criado em">
+                  <time [attr.datetime]="pedido.criadoEm">{{ pedido.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</time>
+                </td>
+                <td data-label="Pagamento">{{ formaPagamento(pedido.formaPagamento) }}</td>
+                <td data-label="Itens">{{ pedido.quantidadeItens }}</td>
+                <td data-label="Total">{{ pedido.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+                <td data-label="Status">
+                  <span class="status" [class]="'status ' + classeStatus(pedido.status)">
+                    {{ rotuloStatus(pedido.status) }}
+                  </span>
+                </td>
+                <td data-label="Ação">
+                  <a class="acao-link" [routerLink]="['/admin/pedidos', pedido.id]">Ver detalhes</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (pedidos.value().totalPaginas > 1) {
+        <nav class="paginacao" aria-label="Paginação de pedidos">
+          <button class="botao botao--secundario" type="button" [disabled]="pagina() <= 0" (click)="irParaPagina(pagina() - 1)">
+            Anterior
+          </button>
+          <span>Página {{ pagina() + 1 }} de {{ pedidos.value().totalPaginas }}</span>
+          <button class="botao botao--secundario" type="button" [disabled]="pagina() >= pedidos.value().totalPaginas - 1" (click)="irParaPagina(pagina() + 1)">
+            Próxima
+          </button>
+        </nav>
+      }
+    } @else if (pedidos.value().totalItens > 0) {
+      <div class="estado" role="status">
+        <strong>Esta página não contém pedidos.</strong>
+        <button class="botao botao--secundario" type="button" (click)="irParaPagina(0)">
+          Ir para a primeira página
+        </button>
+      </div>
+    } @else if (filtrosAtivos()) {
+      <div class="estado">
+        <strong>Nenhum pedido encontrado para os filtros atuais.</strong>
+        <span>Altere ou limpe os filtros para tentar novamente.</span>
+      </div>
+    } @else {
+      <div class="estado">
+        <strong>Nenhum pedido cadastrado.</strong>
+        <span>Quando houver pedidos, eles aparecerão nesta lista.</span>
+      </div>
+    }
+  }
+</section>
