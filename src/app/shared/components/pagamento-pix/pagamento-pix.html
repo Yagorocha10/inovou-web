@@ -1,0 +1,27 @@
+<div class="pix">
+  @if (pixReal()) {
+    <div class="pix__qr">
+      @if (qrCode.hasValue()) {
+        <img [src]="qrCode.value()" alt="QR Code para pagar com Pix" width="220" height="220" />
+      } @else {
+        <div class="pix__qr-carregando esqueleto" aria-hidden="true"></div>
+      }
+      <span>Aponte a câmera do app do banco</span>
+    </div>
+  } @else {
+    <p class="pix__aviso">Pix em modo de simulação: este código não pode ser pago.</p>
+  }
+
+  <div class="pix__copia-e-cola">
+    <span class="pix__rotulo" id="rotulo-pix">Pix copia e cola</span>
+    <code class="pix__codigo" aria-labelledby="rotulo-pix">{{ codigo() }}</code>
+    <button type="button" class="botao botao--primario" (click)="copiar()">
+      {{ copiado() ? 'Código copiado!' : 'Copiar código' }}
+    </button>
+    <span class="pix__status" role="status" aria-live="polite">
+      @if (falhouAoCopiar()) {
+        Não foi possível copiar. Selecione o código e copie manualmente.
+      }
+    </span>
+  </div>
+</div>

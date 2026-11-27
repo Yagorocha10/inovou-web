@@ -66,10 +66,7 @@
           <h2 id="titulo-pagamento" class="cartao__titulo">Pagamento</h2>
           <p class="pagamento__forma">{{ formaPagamento(atual.pagamento.forma) }}</p>
           @if (atual.pagamento.forma === 'PIX' && atual.pagamento.codigoPix) {
-            <div class="codigo-pix">
-              <h3>Código Pix</h3>
-              <code>{{ atual.pagamento.codigoPix }}</code>
-            </div>
+            <app-pagamento-pix [codigo]="atual.pagamento.codigoPix" />
           }
           @if (atual.pagamento.instrucoes) {
             <p class="pagamento__instrucoes">{{ atual.pagamento.instrucoes }}</p>

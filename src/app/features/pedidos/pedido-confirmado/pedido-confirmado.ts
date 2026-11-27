@@ -6,10 +6,11 @@ import { RouterLink } from '@angular/router';
 import { throwError } from 'rxjs';
 import { FormaPagamento, ROTULOS_FORMAS_PAGAMENTO, ROTULOS_STATUS_PEDIDO } from '../../../core/models/pedido';
 import { PedidoService } from '../../../core/services/pedido.service';
+import { PagamentoPix } from '../../../shared/components/pagamento-pix/pagamento-pix';
 
 @Component({
   selector: 'app-pedido-confirmado',
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, PagamentoPix],
   templateUrl: './pedido-confirmado.html',
   styleUrl: './pedido-confirmado.scss',
 })

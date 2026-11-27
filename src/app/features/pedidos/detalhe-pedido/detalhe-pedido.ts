@@ -12,10 +12,11 @@ import {
   ROTULOS_STATUS_PEDIDO,
 } from '../../../core/models/pedido';
 import { PedidoService } from '../../../core/services/pedido.service';
+import { PagamentoPix } from '../../../shared/components/pagamento-pix/pagamento-pix';
 
 @Component({
   selector: 'app-detalhe-pedido',
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, PagamentoPix],
   templateUrl: './detalhe-pedido.html',
   styleUrl: './detalhe-pedido.scss',
 })
