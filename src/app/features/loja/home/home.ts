@@ -21,6 +21,10 @@ export class Home {
     stream: () => this.produtoService.destaques(8),
   });
 
+  protected readonly maisEmConta = rxResource({
+    stream: () => this.produtoService.buscar({ ordenacao: 'MENOR_PRECO', tamanho: 10 }),
+  });
+
   protected readonly categorias = rxResource({
     stream: () => this.categoriaService.listar(),
   });

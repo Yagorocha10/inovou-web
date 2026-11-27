@@ -33,6 +33,18 @@ describe('BannerCarrossel', () => {
     expect(visivel(tela)).toBe('Pague com Pix na hora');
   });
 
+  it('banners de produto mostram características, entrega e Pix; o do Pix não repete a entrega', async () => {
+    const tela = await montar();
+
+    const r36 = tela.querySelectorAll('.banner')[0];
+    expect(r36.querySelector('.banner__chamada')?.textContent).toContain('Videogame portátil');
+    expect(r36.querySelectorAll('.banner__destaques li')).toHaveLength(3);
+    expect(r36.querySelector('.banner__infos')?.textContent).toContain('Entrega em Belém');
+
+    const pix = tela.querySelectorAll('.banner')[3];
+    expect(pix.querySelector('.banner__infos')).toBeNull();
+  });
+
   it('o banner do R36 leva direto à página do produto', async () => {
     const tela = await montar();
 

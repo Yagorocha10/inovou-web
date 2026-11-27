@@ -87,10 +87,19 @@
 }
 
 .card__preco {
+  align-self: flex-start;
+  padding: 0 4px;
+  margin-left: -4px;
   font-size: 22px;
   font-weight: 800;
   font-stretch: 110%;
   color: var(--inovou-navy);
+  background: linear-gradient(
+    transparent 56%,
+    var(--inovou-yellow) 56%,
+    var(--inovou-yellow) 92%,
+    transparent 92%
+  );
 }
 
 .card__acao {
@@ -104,6 +113,7 @@
 
   .card__preco {
     color: var(--inovou-text-muted);
+    background: none;
   }
 
   .card__acao {

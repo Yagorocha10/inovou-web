@@ -3,8 +3,11 @@ import { RouterLink } from '@angular/router';
 
 interface Banner {
   tipo: 'r36' | 'game-stick' | 'carregadores' | 'pix';
+  chamada: string;
   titulo: string;
   texto: string;
+  destaques: string[];
+  mostrarEntrega: boolean;
   acao: string;
   link: string;
   categoria: string | null;
@@ -26,34 +29,46 @@ export class BannerCarrossel implements OnInit {
   protected readonly banners: Banner[] = [
     {
       tipo: 'r36',
+      chamada: 'Videogame portátil',
       titulo: 'Console portátil R36',
       texto:
         'Jogos clássicos numa tela que cabe no bolso. Leve para a escola, o trabalho ou a viagem.',
+      destaques: ['Cabe no bolso', 'Jogos clássicos', 'Bateria recarregável'],
+      mostrarEntrega: true,
       acao: 'Ver o console R36',
       link: '/produtos/console-portatil-r36',
       categoria: null,
     },
     {
       tipo: 'game-stick',
+      chamada: 'Videogame para TV',
       titulo: 'Game Stick 4K com 2 controles',
       texto:
         'Ligue na TV pelo HDMI e jogue os clássicos com dois controles sem fio. Diversão para a família toda.',
+      destaques: ['Imagem 4K', 'Liga no HDMI', '2 controles sem fio'],
+      mostrarEntrega: true,
       acao: 'Ver o Game Stick',
       link: '/produtos/game-stick',
       categoria: null,
     },
     {
       tipo: 'carregadores',
+      chamada: 'Carregadores e cabos',
       titulo: 'Bateria cheia o dia todo',
       texto: 'Carregadores e cabos para iPhone e Android, com entrega rápida em Belém.',
+      destaques: ['iPhone e Android', 'Vários modelos', 'Pronta entrega'],
+      mostrarEntrega: true,
       acao: 'Ver carregadores e cabos',
       link: '/produtos',
       categoria: 'carregadores-e-cabos',
     },
     {
       tipo: 'pix',
+      chamada: 'Pagamento',
       titulo: 'Pague com Pix na hora',
       texto: 'No fim da compra é só ler o QR Code no app do banco. Sem boleto, sem espera.',
+      destaques: ['QR Code', 'Copia e cola', 'Sem boleto'],
+      mostrarEntrega: false,
       acao: 'Escolher produtos',
       link: '/produtos',
       categoria: null,

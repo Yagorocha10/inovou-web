@@ -1,24 +1,5 @@
 <app-banner-carrossel />
 
-<ul class="vantagens" aria-label="Vantagens de comprar na Inovou Store">
-  <li class="vantagem">
-    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
-    <span><strong>Entrega em Belém</strong> e região metropolitana</span>
-  </li>
-  <li class="vantagem">
-    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">qr_code_2</mat-icon>
-    <span><strong>Pague com Pix</strong> pelo QR Code ou copia e cola</span>
-  </li>
-  <li class="vantagem">
-    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
-    <span><strong>Atendimento no WhatsApp</strong> antes e depois da compra</span>
-  </li>
-  <li class="vantagem">
-    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">inventory_2</mat-icon>
-    <span><strong>Acompanhe o pedido</strong> em Meus pedidos</span>
-  </li>
-</ul>
-
 @if (categorias.hasValue() && categorias.value().length > 0) {
   <section class="secao" aria-labelledby="titulo-categorias">
     <h2 id="titulo-categorias" class="titulo-secao">Compre por categoria</h2>
@@ -39,7 +20,7 @@
 
 <section class="secao" aria-labelledby="titulo-destaques">
   <div class="secao__cabecalho">
-    <h2 id="titulo-destaques" class="titulo-secao">Destaques da loja</h2>
+    <h2 id="titulo-destaques" class="titulo-secao">Chegaram na loja</h2>
     <a routerLink="/produtos" class="secao__link">Ver todos</a>
   </div>
 
@@ -69,6 +50,56 @@
       <a routerLink="/produtos" class="botao botao--secundario">Ver catálogo completo</a>
     </div>
   }
+</section>
+
+@if (maisEmConta.hasValue() && maisEmConta.value().itens.length > 0) {
+  <section class="secao" aria-labelledby="titulo-mais-em-conta">
+    <div class="secao__cabecalho">
+      <h2 id="titulo-mais-em-conta" class="titulo-secao">Mais em conta</h2>
+      <a routerLink="/produtos" [queryParams]="{ ordenacao: 'MENOR_PRECO' }" class="secao__link">
+        Ver todos
+      </a>
+    </div>
+    <div class="prateleira">
+      @for (produto of maisEmConta.value().itens; track produto.id) {
+        <app-card-produto class="prateleira__item" [produto]="produto" />
+      }
+    </div>
+  </section>
+}
+
+<section class="secao confianca" aria-labelledby="titulo-confianca">
+  <h2 id="titulo-confianca" class="titulo-secao">Por que comprar na Inovou Store</h2>
+  <ul class="confianca__lista">
+    <li class="confianca__item">
+      <span class="confianca__icone">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">storefront</mat-icon>
+      </span>
+      <strong>Loja de Belém</strong>
+      <span>Somos daqui. Você compra de quem conhece a cidade e entrega rápido.</span>
+    </li>
+    <li class="confianca__item">
+      <span class="confianca__icone">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
+      </span>
+      <strong>Entrega em até 2 dias</strong>
+      <span>Frete de R$ 10 em Belém e de R$ 15 na região metropolitana.</span>
+    </li>
+    <li class="confianca__item">
+      <span class="confianca__icone">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">qr_code_2</mat-icon>
+      </span>
+      <strong>Pix sem complicação</strong>
+      <span>QR Code e copia e cola gerados na hora, no fim da compra.</span>
+    </li>
+    <li class="confianca__item">
+      <span class="confianca__icone">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
+      </span>
+      <strong>Gente de verdade no WhatsApp</strong>
+      <span>Tire dúvidas antes de comprar e acompanhe o pedido depois.</span>
+    </li>
+  </ul>
 </section>
 
 <section class="atendimento" aria-labelledby="titulo-atendimento">

@@ -22,7 +22,7 @@
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   align-items: center;
   gap: 16px;
-  min-height: 400px;
+  min-height: 440px;
   padding: clamp(32px, 5vw, 56px) clamp(28px, 6vw, 80px);
   box-sizing: border-box;
   color: #ffffff;
@@ -44,47 +44,93 @@
   background: var(--inovou-blue-dark);
 }
 
+.banner__chamada {
+  margin: 0 0 10px;
+  color: var(--inovou-yellow);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.banner--game-stick .banner__chamada {
+  color: #ffffff;
+}
+
 .banner__titulo {
   margin: 0;
   color: #ffffff;
-  font-size: clamp(32px, 4.6vw, 58px);
+  font-size: clamp(30px, 4vw, 52px);
   font-stretch: 125%;
   font-weight: 900;
   line-height: 1.02;
   letter-spacing: -0.02em;
 }
 
-.banner__texto p {
-  margin: 18px 0 0;
-  max-width: 42ch;
-  font-size: clamp(16px, 1.5vw, 18px);
-  line-height: 1.55;
+.banner__descricao {
+  margin: 14px 0 0;
+  max-width: 44ch;
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.5;
   color: #dbe6ff;
 }
 
+.banner__destaques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+.banner__infos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.banner__info {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  line-height: 1.3;
+  color: #dbe6ff;
+
+  strong {
+    display: block;
+    color: #ffffff;
+  }
+
+  .material-symbols-outlined {
+    font-size: 22px;
+    color: var(--inovou-yellow);
+  }
+}
+
 .banner__acao {
-  margin-top: 28px;
+  margin-top: 24px;
   min-height: 52px;
-  padding: 0 26px;
-  background: #ffffff;
-  color: var(--inovou-blue-dark);
+  padding: 0 28px;
+  background: var(--inovou-yellow);
+  color: var(--inovou-navy);
   font-size: 15px;
   font-weight: 800;
 
   &:hover {
-    background: var(--inovou-blue-soft);
+    background: var(--inovou-yellow-dark);
     color: var(--inovou-navy);
-  }
-}
-
-.banner--r36 .banner__acao,
-.banner--carregadores .banner__acao {
-  background: var(--inovou-blue);
-  color: #ffffff;
-
-  &:hover {
-    background: #2b6bff;
-    color: #ffffff;
   }
 }
 
@@ -125,9 +171,9 @@
   gap: 6px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: var(--inovou-navy);
-  color: #ffffff;
-  font-weight: 700;
+  background: var(--inovou-yellow);
+  color: var(--inovou-navy);
+  font-weight: 800;
   font-size: 0.875rem;
   transform: rotate(2deg);
 
@@ -223,9 +269,18 @@
     font-size: 0.8125rem;
   }
 
+  .banner__infos {
+    display: none;
+  }
+
+  .banner__destaques li {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
   .banner__acao {
     width: 100%;
-    margin-top: 22px;
+    margin-top: 20px;
   }
 
   .carrossel__seta {

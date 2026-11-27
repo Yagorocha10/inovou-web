@@ -19,12 +19,30 @@
         [attr.inert]="i !== atual() ? '' : null"
       >
         <div class="banner__texto">
+          <p class="banner__chamada">{{ banner.chamada }}</p>
           @if (i === 0) {
             <h1 class="banner__titulo">{{ banner.titulo }}</h1>
           } @else {
             <h2 class="banner__titulo">{{ banner.titulo }}</h2>
           }
-          <p>{{ banner.texto }}</p>
+          <p class="banner__descricao">{{ banner.texto }}</p>
+          <ul class="banner__destaques">
+            @for (destaque of banner.destaques; track destaque) {
+              <li>{{ destaque }}</li>
+            }
+          </ul>
+          @if (banner.mostrarEntrega) {
+            <div class="banner__infos">
+              <span class="banner__info">
+                <span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+                <span><strong>Entrega em Belém</strong> em até 2 dias</span>
+              </span>
+              <span class="banner__info">
+                <span class="material-symbols-outlined" aria-hidden="true">qr_code_2</span>
+                <span><strong>Pix na hora</strong> QR Code ou copia e cola</span>
+              </span>
+            </div>
+          }
           <a
             [routerLink]="banner.link"
             [queryParams]="banner.categoria ? { categoria: banner.categoria } : null"
