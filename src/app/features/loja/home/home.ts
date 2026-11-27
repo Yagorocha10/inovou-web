@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
+import { BannerCarrossel } from './banner-carrossel/banner-carrossel';
 import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { ProdutoService } from '../../../core/services/produto.service';
@@ -8,7 +9,7 @@ import { CardProduto } from '../../../shared/components/card-produto/card-produt
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CardProduto, MatIconModule],
+  imports: [RouterLink, CardProduto, MatIconModule, BannerCarrossel],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

@@ -2,88 +2,6 @@
   display: block;
 }
 
-.hero {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  margin-top: 8px;
-  border-radius: 20px;
-  background: var(--inovou-blue);
-  color: #ffffff;
-  padding: clamp(36px, 6vw, 72px) clamp(24px, 5vw, 64px);
-}
-
-.hero__texto {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-
-  h1 {
-    margin: 0;
-    color: #ffffff;
-    font-size: clamp(32px, 5vw, 56px);
-    font-stretch: 125%;
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-  }
-
-  p {
-    margin: 18px 0 0;
-    max-width: 46ch;
-    font-size: clamp(16px, 1.6vw, 18px);
-    line-height: 1.55;
-    color: #dbe6ff;
-  }
-}
-
-.hero__acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.hero__botao {
-  min-height: 50px;
-  padding: 0 24px;
-  background: #ffffff;
-  color: var(--inovou-blue-dark);
-  font-size: 15px;
-  font-weight: 800;
-
-  &:hover {
-    background: var(--inovou-navy);
-    color: #ffffff;
-  }
-}
-
-.hero__botao--contorno {
-  min-height: 50px;
-  padding: 0 22px;
-  border-color: rgba(255, 255, 255, 0.6);
-  color: #ffffff;
-  font-size: 15px;
-
-  &:hover {
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-  }
-}
-
-.hero__marca {
-  position: absolute;
-  z-index: 0;
-  right: -6%;
-  top: 50%;
-  height: 150%;
-  transform: translateY(-46%);
-  filter: brightness(0) invert(1);
-  opacity: 0.13;
-  pointer-events: none;
-}
-
 .vantagens {
   list-style: none;
   margin: 20px 0 0;
@@ -242,19 +160,6 @@
 }
 
 @media (max-width: 600px) {
-  .hero {
-    border-radius: 16px;
-  }
-
-  .hero__marca {
-    height: 105%;
-    right: -18%;
-  }
-
-  .hero__acoes .botao {
-    width: 100%;
-  }
-
   .vantagens {
     grid-template-columns: 1fr;
     padding: 8px;

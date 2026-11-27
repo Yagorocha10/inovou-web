@@ -1,23 +1,4 @@
-<section class="hero" aria-labelledby="titulo-hero">
-  <div class="hero__texto">
-    <h1 id="titulo-hero">Tecnologia que chega rápido em Belém</h1>
-    <p>
-      Controles, videogames portáteis, carregadores, relógios e ferramentas. Compre pelo site, pague
-      com Pix e receba em casa.
-    </p>
-    <div class="hero__acoes">
-      <a routerLink="/produtos" class="botao hero__botao">Ver todos os produtos</a>
-      <a
-        routerLink="/produtos"
-        [queryParams]="{ categoria: 'games-e-controles' }"
-        class="botao hero__botao--contorno"
-      >
-        Games e controles
-      </a>
-    </div>
-  </div>
-  <img class="hero__marca" src="marca-iv.png" alt="" aria-hidden="true" />
-</section>
+<app-banner-carrossel />
 
 <ul class="vantagens" aria-label="Vantagens de comprar na Inovou Store">
   <li class="vantagem">
