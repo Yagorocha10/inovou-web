@@ -1,5 +1,7 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { provideLocalePtBr } from '../../../core/locale';
 import { ProdutoResumo } from '../../../core/models/catalogo';
 import { CardProduto } from './card-produto';
@@ -18,7 +20,12 @@ describe('CardProduto', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CardProduto],
-      providers: [provideRouter([]), provideLocalePtBr()],
+      providers: [
+        provideRouter([]),
+        provideLocalePtBr(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     }).compileComponents();
   });
 
@@ -47,5 +54,29 @@ describe('CardProduto', () => {
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('.card__selo')?.textContent,
     ).toContain('Esgotado');
+  });
+
+  it('visitante que clica em Adicionar vai para o login e volta ao produto', async () => {
+    localStorage.clear();
+    const fixture = TestBed.createComponent(CardProduto);
+    fixture.componentRef.setInput('produto', controle);
+    await fixture.whenStable();
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    (fixture.nativeElement.querySelector('button.card__acao') as HTMLButtonElement).click();
+
+    expect(navegar).toHaveBeenCalledWith(['/entrar'], {
+      queryParams: { retorno: '/produtos/controle-ps4-sem-fio-bluetooth' },
+    });
+  });
+
+  it('produto esgotado não tem botão de adicionar, só ver detalhes', async () => {
+    const fixture = TestBed.createComponent(CardProduto);
+    fixture.componentRef.setInput('produto', { ...controle, disponivel: false });
+    await fixture.whenStable();
+    const card = fixture.nativeElement as HTMLElement;
+
+    expect(card.querySelector('button.card__acao')).toBeNull();
+    expect(card.querySelector('.card__acao--detalhes')?.textContent).toContain('Ver detalhes');
   });
 });

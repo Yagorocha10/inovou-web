@@ -1,34 +1,42 @@
 <div class="faixa-topo">
-  <div class="container faixa-topo__linha">
-    <span class="faixa-topo__item">
-      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
-      Entrega rápida em Belém e região
-    </span>
-    <a class="faixa-topo__item" href="https://wa.me/559187226520" target="_blank" rel="noopener">
-      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
-      Atendimento no WhatsApp (91) 8722-6520
-    </a>
-  </div>
+  <p class="container faixa-topo__texto">
+    <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
+    Entrega em Belém em até 2 dias · Frete de R$ 10 · Pague com Pix na hora
+  </p>
 </div>
 
 <header class="header">
   <div class="container header__linha">
-    <a routerLink="/" class="logo" aria-label="Inovou Store, página inicial">
-      <img src="logo-nome.png" alt="Inovou Store" width="930" height="234" />
-    </a>
-
-    <form class="busca" role="search" (submit)="buscar($event, campoBusca.value)">
-      <label for="busca" class="visually-hidden">Buscar produtos</label>
-      <input
-        #campoBusca
-        id="busca"
-        type="search"
-        name="busca"
-        placeholder="Buscar controles, carregadores, relógios..."
-      />
-      <button type="submit" aria-label="Buscar">
-        <mat-icon fontSet="material-symbols-outlined">search</mat-icon>
+    <div class="header__marca">
+      <button
+        type="button"
+        class="botao-menu"
+        aria-label="Abrir categorias"
+        [attr.aria-expanded]="menuAberto()"
+        aria-controls="menu-categorias"
+        (click)="alternarMenu()"
+      >
+        <mat-icon fontSet="material-symbols-outlined">{{
+          menuAberto() ? 'close' : 'menu'
+        }}</mat-icon>
       </button>
+      <a routerLink="/" class="logo" aria-label="Inovou Store, página inicial">
+        <img src="logo-nome.png" alt="Inovou Store" width="930" height="234" />
+      </a>
+    </div>
+
+    <form class="busca busca--desktop" role="search" (submit)="buscar($event, campoBusca.value)">
+      <label class="busca__campo">
+        <span class="visually-hidden">Buscar produtos</span>
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">search</mat-icon>
+        <input
+          #campoBusca
+          id="busca"
+          type="search"
+          name="busca"
+          placeholder="O que você está procurando?"
+        />
+      </label>
     </form>
 
     <nav class="acoes" aria-label="Conta, pedidos e carrinho">
@@ -39,59 +47,86 @@
         </a>
       }
       @if (auth.logado()) {
-        <a routerLink="/conta" class="acoes__link" aria-label="Minha conta">
+        <a routerLink="/conta" class="acoes__link acoes__link--conta" aria-label="Minha conta">
           <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
           <span class="acoes__texto">
             <small>Olá, {{ auth.primeiroNome() }}</small>
             Minha conta
           </span>
         </a>
-        <a routerLink="/pedidos" class="acoes__link" aria-label="Meus pedidos">
+        <a routerLink="/pedidos" class="acoes__icone-link" aria-label="Meus pedidos">
           <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">receipt_long</mat-icon>
-          <span class="acoes__texto">Meus pedidos</span>
         </a>
       } @else {
-        <a routerLink="/entrar" class="acoes__link">
+        <a routerLink="/entrar" class="acoes__link acoes__link--conta">
           <mat-icon fontSet="material-symbols-outlined">person</mat-icon>
           <span class="acoes__texto">
             <small>Olá, visitante</small>
-            Entrar ou cadastrar
+            Minha conta
           </span>
         </a>
       }
       <a
         routerLink="/carrinho"
-        class="acoes__link acoes__link--carrinho"
+        class="acoes__icone-link"
         [attr.aria-label]="'Carrinho, ' + quantidadeCarrinho() + ' itens'"
       >
-        <span class="acoes__icone">
-          <mat-icon fontSet="material-symbols-outlined">shopping_cart</mat-icon>
-          @if (quantidadeCarrinho() > 0) {
-            <span class="acoes__badge">{{ quantidadeCarrinho() }}</span>
-          }
-        </span>
-        <span class="acoes__texto">Carrinho</span>
+        <mat-icon fontSet="material-symbols-outlined">shopping_cart</mat-icon>
+        @if (quantidadeCarrinho() > 0) {
+          <span class="acoes__badge">{{ quantidadeCarrinho() }}</span>
+        }
       </a>
     </nav>
   </div>
 
-  <nav class="faixa-categorias" aria-label="Categorias">
-    <div class="container categorias">
-      <a routerLink="/produtos" class="categorias__link categorias__link--todos">
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">menu</mat-icon>
-        Todos os produtos
-      </a>
+  <form class="busca busca--mobile" role="search" (submit)="buscar($event, campoBuscaMobile.value)">
+    <label class="busca__campo">
+      <span class="visually-hidden">Buscar produtos</span>
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">search</mat-icon>
+      <input
+        #campoBuscaMobile
+        id="busca-mobile"
+        type="search"
+        name="busca"
+        placeholder="O que você está procurando?"
+      />
+    </label>
+  </form>
+
+  <nav
+    id="menu-categorias"
+    class="faixa-categorias"
+    [class.faixa-categorias--aberta]="menuAberto()"
+    aria-label="Categorias"
+  >
+    <ul class="container categorias">
+      <li>
+        <a routerLink="/produtos" class="categorias__link" (click)="menuAberto.set(false)"
+          >Todos os produtos</a
+        >
+      </li>
       @for (categoria of categorias(); track categoria.id) {
+        <li>
+          <a
+            routerLink="/produtos"
+            [queryParams]="{ categoria: categoria.slug }"
+            class="categorias__link"
+            (click)="menuAberto.set(false)"
+          >
+            {{ categoria.nome }}
+          </a>
+        </li>
+      }
+      <li>
         <a
           routerLink="/produtos"
-          [queryParams]="{ categoria: categoria.slug }"
-          class="categorias__link"
+          [queryParams]="{ ordenacao: 'MENOR_PRECO' }"
+          class="categorias__link categorias__link--destaque"
+          (click)="menuAberto.set(false)"
         >
-          {{ categoria.nome }}
+          Menores preços
         </a>
-      }
-    </div>
+      </li>
+    </ul>
   </nav>
 </header>
-
-<app-faixa-beneficios />

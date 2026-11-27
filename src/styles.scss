@@ -1,23 +1,29 @@
 @use '@angular/material' as mat;
 
 :root {
-  --inovou-navy: #000e2b;
-  --inovou-navy-light: #0b1f4a;
-  --inovou-blue: #0050fd;
-  --inovou-blue-dark: #0037b8;
-  --inovou-blue-soft: #e5edff;
+  --inovou-navy: #0c152a;
+  --inovou-navy-light: #1a2542;
+  --inovou-blue: #2061f5;
+  --inovou-blue-dark: #174fd4;
+  --inovou-blue-soft: #e9effe;
   --inovou-yellow: #ffc83d;
   --inovou-yellow-dark: #f2b400;
-  --inovou-bg: #f2f5fb;
+  --inovou-hero: #eef4fc;
+  --inovou-sale: #ee343b;
+  --inovou-star: #f3b01d;
+  --inovou-muted: #f1f5f9;
+  --inovou-bg: #fafcfe;
   --inovou-surface: #ffffff;
-  --inovou-border: #d9e0ee;
-  --inovou-text: #0a1630;
-  --inovou-text-muted: #56647e;
-  --inovou-text-on-dark: #c3cee6;
-  --inovou-radius: 12px;
-  --inovou-font-body: 'Archivo', system-ui, sans-serif;
-  --inovou-font-title: 'Archivo', system-ui, sans-serif;
-  --inovou-container: 1240px;
+  --inovou-border: #e2e8f0;
+  --inovou-text: #0c152a;
+  --inovou-text-muted: #62748e;
+  --inovou-text-on-dark: #b4bdcc;
+  --inovou-radius: 10px;
+  --inovou-shadow-card: 0 18px 40px -18px rgba(12, 21, 42, 0.25);
+  --inovou-shadow-glow: 0 12px 30px -10px rgba(32, 97, 245, 0.6);
+  --inovou-font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --inovou-font-title: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --inovou-container: 1280px;
 }
 
 html {
@@ -29,8 +35,8 @@ html {
         tertiary: mat.$blue-palette,
       ),
       typography: (
-        plain-family: 'Archivo',
-        brand-family: 'Archivo',
+        plain-family: 'Plus Jakarta Sans',
+        brand-family: 'Plus Jakarta Sans',
       ),
       density: 0,
     )
@@ -50,9 +56,8 @@ h1,
 h2,
 h3 {
   font-family: var(--inovou-font-title);
-  font-stretch: 112%;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
   color: var(--inovou-navy);
 }
 
@@ -72,7 +77,7 @@ a:hover {
 .container {
   max-width: var(--inovou-container);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px;
   box-sizing: border-box;
 }
 

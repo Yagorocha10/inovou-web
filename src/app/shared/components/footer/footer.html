@@ -1,46 +1,71 @@
 <footer class="footer">
   <div class="container footer__colunas">
     <div class="footer__marca">
-      <img src="logo-nome-claro.png" alt="Inovou Store" width="930" height="234" loading="lazy" />
-      <p>Eletrônicos, games, carregadores, relógios e ferramentas com entrega em Belém e região.</p>
+      <span class="footer__logo">
+        <img src="logo-nome.png" alt="Inovou Store" width="930" height="234" loading="lazy" />
+      </span>
+      <p>
+        Tecnologia, praticidade e qualidade para o seu dia a dia. Produtos selecionados com ótimos
+        preços e atendimento de verdade.
+      </p>
     </div>
 
-    <div class="footer__coluna">
-      <h2 class="footer__titulo">Loja</h2>
-      <a routerLink="/produtos">Todos os produtos</a>
-      <a routerLink="/produtos" [queryParams]="{ categoria: 'games-e-controles' }"
-        >Games e controles</a
-      >
-      <a routerLink="/produtos" [queryParams]="{ categoria: 'carregadores-e-cabos' }"
-        >Carregadores e cabos</a
-      >
-      <a routerLink="/produtos" [queryParams]="{ categoria: 'eletronicos' }">Eletrônicos</a>
+    <div>
+      <h2 class="footer__titulo">Categorias</h2>
+      <ul class="footer__lista">
+        <li>
+          <a routerLink="/produtos" [queryParams]="{ categoria: 'eletronicos' }">Eletrônicos</a>
+        </li>
+        <li>
+          <a routerLink="/produtos" [queryParams]="{ categoria: 'games-e-controles' }"
+            >Games e controles</a
+          >
+        </li>
+        <li>
+          <a routerLink="/produtos" [queryParams]="{ categoria: 'carregadores-e-cabos' }"
+            >Carregadores e cabos</a
+          >
+        </li>
+        <li>
+          <a routerLink="/produtos" [queryParams]="{ categoria: 'ferramentas' }">Ferramentas</a>
+        </li>
+        <li><a routerLink="/produtos" [queryParams]="{ categoria: 'relogios' }">Relógios</a></li>
+        <li>
+          <a routerLink="/produtos" [queryParams]="{ ordenacao: 'MENOR_PRECO' }">Menores preços</a>
+        </li>
+      </ul>
     </div>
 
-    <div class="footer__coluna">
-      <h2 class="footer__titulo">Minha conta</h2>
-      <a routerLink="/conta">Meus dados e endereços</a>
-      <a routerLink="/pedidos">Meus pedidos</a>
-      <a routerLink="/carrinho">Carrinho</a>
-    </div>
-
-    <div class="footer__coluna">
+    <div>
       <h2 class="footer__titulo">Atendimento</h2>
-      <a href="https://wa.me/559187226520" target="_blank" rel="noopener"
-        >WhatsApp (91) 8722-6520</a
-      >
-      <span>Entregas em Belém e região metropolitana</span>
+      <ul class="footer__lista">
+        <li class="footer__item">
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
+          <a href="https://wa.me/559187226520" target="_blank" rel="noopener"
+            >WhatsApp (91) 8722-6520</a
+          >
+        </li>
+        <li class="footer__item">
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
+          Entregas em Belém e região metropolitana
+        </li>
+        <li><a routerLink="/pedidos">Meus pedidos</a></li>
+        <li><a routerLink="/conta">Minha conta</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="footer__titulo">Pagamento</h2>
       <div class="footer__pagamentos" aria-label="Formas de pagamento">
         <span class="footer__pagamento">Pix</span>
         <span class="footer__pagamento">Cartão</span>
         <span class="footer__pagamento">Na entrega</span>
       </div>
+      <p class="footer__nota">Pague com Pix pelo QR Code ou copia e cola na hora da compra.</p>
     </div>
   </div>
 
-  <div class="footer__copy">
-    <div class="container">© {{ anoAtual }} Inovou Store. Todos os direitos reservados.</div>
-  </div>
+  <div class="footer__copy">© {{ anoAtual }} Inovou Store. Todos os direitos reservados.</div>
 </footer>
 
 <a

@@ -1,22 +1,34 @@
 <article class="card" [class.card--esgotado]="!produto().disponivel">
-  <a [routerLink]="['/produtos', produto().slug]" class="card__link">
-    <div class="card__imagem">
-      @if (produto().imagemPrincipal; as imagem) {
-        <img [src]="imagem" [alt]="produto().nome" loading="lazy" />
-      } @else {
-        <img class="card__sem-foto" src="marca-iv.png" alt="" loading="lazy" />
-      }
-      @if (!produto().disponivel) {
-        <span class="card__selo">Esgotado</span>
-      }
-    </div>
-    <div class="card__corpo">
-      <span class="card__categoria">{{ produto().categoria.nome }}</span>
-      <h3 class="card__nome">{{ produto().nome }}</h3>
+  @if (!produto().disponivel) {
+    <span class="card__selo">Esgotado</span>
+  }
+  <a
+    [routerLink]="['/produtos', produto().slug]"
+    class="card__imagem"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    @if (produto().imagemPrincipal; as imagem) {
+      <img [src]="imagem" alt="" loading="lazy" />
+    } @else {
+      <img class="card__sem-foto" src="marca-iv.png" alt="" loading="lazy" />
+    }
+  </a>
+  <div class="card__corpo">
+    <span class="card__categoria">{{ produto().categoria.nome }}</span>
+    <a [routerLink]="['/produtos', produto().slug]" class="card__nome">{{ produto().nome }}</a>
+    <div class="card__valores">
       <span class="card__preco">{{ produto().preco | currency }}</span>
     </div>
-  </a>
-  <a [routerLink]="['/produtos', produto().slug]" class="botao botao--primario card__acao">
-    {{ produto().disponivel ? 'Ver produto' : 'Ver detalhes' }}
-  </a>
+    @if (produto().disponivel) {
+      <button type="button" class="card__acao" [disabled]="adicionando()" (click)="adicionar()">
+        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">shopping_cart</mat-icon>
+        {{ adicionando() ? 'Adicionando...' : 'Adicionar' }}
+      </button>
+    } @else {
+      <a [routerLink]="['/produtos', produto().slug]" class="card__acao card__acao--detalhes">
+        Ver detalhes
+      </a>
+    }
+  </div>
 </article>

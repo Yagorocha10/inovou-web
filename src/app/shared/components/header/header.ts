@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,11 +6,10 @@ import { catchError, of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
-import { FaixaBeneficios } from '../faixa-beneficios/faixa-beneficios';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, MatIconModule, FaixaBeneficios],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -27,8 +26,15 @@ export class Header {
     { initialValue: [] },
   );
 
+  protected readonly menuAberto = signal(false);
+
+  protected alternarMenu(): void {
+    this.menuAberto.update((aberto) => !aberto);
+  }
+
   protected buscar(evento: Event, termo: string): void {
     evento.preventDefault();
+    this.menuAberto.set(false);
     const busca = termo.trim();
     this.router.navigate(['/produtos'], { queryParams: busca ? { busca } : {} });
   }

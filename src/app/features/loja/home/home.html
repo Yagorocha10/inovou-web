@@ -1,17 +1,38 @@
-<app-banner-carrossel />
+<section class="hero" aria-labelledby="titulo-hero">
+  <img class="hero__imagem" src="banners/game-stick.jpg" alt="" />
+  <div class="hero__degrade" aria-hidden="true"></div>
+  <div class="hero__conteudo">
+    <span class="selo">
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">bolt</mat-icon>
+      Entrega rápida em Belém
+    </span>
+    <h1 id="titulo-hero" class="hero__titulo">
+      Tecnologia, praticidade e qualidade para o seu dia a dia.
+    </h1>
+    <p class="hero__texto">
+      Encontre produtos selecionados com ótimos preços e aproveite nossas ofertas.
+    </p>
+    <a routerLink="/produtos" class="botao-pilula botao-pilula--primario">
+      Ver produtos
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">arrow_forward</mat-icon>
+    </a>
+  </div>
+</section>
 
 @if (categorias.hasValue() && categorias.value().length > 0) {
   <section class="secao" aria-labelledby="titulo-categorias">
-    <h2 id="titulo-categorias" class="titulo-secao">Compre por categoria</h2>
+    <div class="secao__cabecalho">
+      <h2 id="titulo-categorias" class="secao__titulo">Navegue por categorias</h2>
+    </div>
     <div class="categorias">
       @for (categoria of categorias.value(); track categoria.id) {
         <a routerLink="/produtos" [queryParams]="{ categoria: categoria.slug }" class="categoria">
-          <span class="categoria__icone">
+          <span class="categoria__imagem">
             <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">
               {{ iconeDaCategoria(categoria.slug) }}
             </mat-icon>
           </span>
-          {{ categoria.nome }}
+          <span class="categoria__nome">{{ categoria.nome }}</span>
         </a>
       }
     </div>
@@ -20,12 +41,14 @@
 
 <section class="secao" aria-labelledby="titulo-destaques">
   <div class="secao__cabecalho">
-    <h2 id="titulo-destaques" class="titulo-secao">Chegaram na loja</h2>
-    <a routerLink="/produtos" class="secao__link">Ver todos</a>
+    <div>
+      <h2 id="titulo-destaques" class="secao__titulo">Produtos em destaque</h2>
+      <p class="secao__subtitulo">Selecionados a dedo para você</p>
+    </div>
   </div>
 
   @if (destaques.isLoading()) {
-    <div class="grade-produtos">
+    <div class="vitrine">
       @for (item of esqueletos; track item) {
         <div class="esqueleto"></div>
       }
@@ -39,7 +62,7 @@
       </button>
     </div>
   } @else if (destaques.value()?.length) {
-    <div class="grade-produtos">
+    <div class="vitrine">
       @for (produto of destaques.value(); track produto.id) {
         <app-card-produto [produto]="produto" />
       }
@@ -54,65 +77,76 @@
 
 @if (maisEmConta.hasValue() && maisEmConta.value().itens.length > 0) {
   <section class="secao" aria-labelledby="titulo-mais-em-conta">
-    <div class="secao__cabecalho">
-      <h2 id="titulo-mais-em-conta" class="titulo-secao">Mais em conta</h2>
-      <a routerLink="/produtos" [queryParams]="{ ordenacao: 'MENOR_PRECO' }" class="secao__link">
-        Ver todos
-      </a>
-    </div>
-    <div class="prateleira">
-      @for (produto of maisEmConta.value().itens; track produto.id) {
-        <app-card-produto class="prateleira__item" [produto]="produto" />
-      }
+    <div class="ofertas">
+      <div class="ofertas__cabecalho">
+        <div>
+          <span class="selo selo--vermelho">
+            <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">sell</mat-icon>
+            Menores preços
+          </span>
+          <h2 id="titulo-mais-em-conta" class="ofertas__titulo">Preços que cabem no bolso</h2>
+          <p class="ofertas__texto">Os produtos mais em conta da loja.</p>
+        </div>
+        <a
+          routerLink="/produtos"
+          [queryParams]="{ ordenacao: 'MENOR_PRECO' }"
+          class="ofertas__link"
+        >
+          Ver todos
+        </a>
+      </div>
+      <div class="vitrine">
+        @for (produto of maisEmConta.value().itens; track produto.id) {
+          <app-card-produto [produto]="produto" />
+        }
+      </div>
     </div>
   </section>
 }
 
-<section class="secao confianca" aria-labelledby="titulo-confianca">
-  <h2 id="titulo-confianca" class="titulo-secao">Por que comprar na Inovou Store</h2>
-  <ul class="confianca__lista">
-    <li class="confianca__item">
-      <span class="confianca__icone">
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">storefront</mat-icon>
-      </span>
-      <strong>Loja de Belém</strong>
-      <span>Somos daqui. Você compra de quem conhece a cidade e entrega rápido.</span>
-    </li>
-    <li class="confianca__item">
-      <span class="confianca__icone">
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
-      </span>
-      <strong>Entrega em até 2 dias</strong>
-      <span>Frete de R$ 10 em Belém e de R$ 15 na região metropolitana.</span>
-    </li>
-    <li class="confianca__item">
-      <span class="confianca__icone">
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">qr_code_2</mat-icon>
-      </span>
-      <strong>Pix sem complicação</strong>
-      <span>QR Code e copia e cola gerados na hora, no fim da compra.</span>
-    </li>
-    <li class="confianca__item">
-      <span class="confianca__icone">
-        <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
-      </span>
-      <strong>Gente de verdade no WhatsApp</strong>
-      <span>Tire dúvidas antes de comprar e acompanhe o pedido depois.</span>
-    </li>
+<section class="secao" aria-label="Vantagens de comprar na Inovou Store">
+  <ul class="vantagens">
+    @for (vantagem of vantagens; track vantagem.titulo) {
+      <li class="vantagem">
+        <span class="vantagem__icone">
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">{{
+            vantagem.icone
+          }}</mat-icon>
+        </span>
+        <span>
+          <strong>{{ vantagem.titulo }}</strong>
+          <small>{{ vantagem.texto }}</small>
+        </span>
+      </li>
+    }
   </ul>
 </section>
 
-<section class="atendimento" aria-labelledby="titulo-atendimento">
-  <div>
-    <h2 id="titulo-atendimento">Não achou o que procurava?</h2>
-    <p>Mande uma mensagem. A gente confere o estoque e indica o produto certo para você.</p>
+<section class="secao" aria-labelledby="titulo-chamada">
+  <div class="chamada">
+    <h2 id="titulo-chamada" class="chamada__titulo">
+      Encontre o que você precisa, sem complicação.
+    </h2>
+    <p class="chamada__texto">Eletrônicos, ferramentas, games e acessórios em um só lugar.</p>
+    <a routerLink="/produtos" class="botao-pilula botao-pilula--claro">
+      Explore nossa loja
+      <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">arrow_forward</mat-icon>
+    </a>
   </div>
-  <a
-    class="botao atendimento__botao"
-    href="https://wa.me/559187226520"
-    target="_blank"
-    rel="noopener"
-  >
-    Chamar no WhatsApp
-  </a>
 </section>
+
+@if (games.hasValue() && games.value().itens.length > 0) {
+  <section class="secao" aria-labelledby="titulo-games">
+    <div class="secao__cabecalho">
+      <div>
+        <h2 id="titulo-games" class="secao__titulo">Games e controles</h2>
+        <p class="secao__subtitulo">Diversão para todas as idades</p>
+      </div>
+    </div>
+    <div class="vitrine">
+      @for (produto of games.value().itens; track produto.id) {
+        <app-card-produto [produto]="produto" />
+      }
+    </div>
+  </section>
+}
