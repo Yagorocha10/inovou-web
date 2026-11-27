@@ -1,0 +1,162 @@
+<section class="pagina-admin-produtos" aria-labelledby="titulo-produtos">
+  <header class="cabecalho">
+    <div>
+      <h1 id="titulo-produtos" class="titulo-secao">Produtos</h1>
+      @if (produtos.hasValue() && !produtos.isLoading()) {
+        <p class="cabecalho__total">
+          {{ produtos.value().totalItens }}
+          {{ produtos.value().totalItens === 1 ? 'produto cadastrado' : 'produtos cadastrados' }}
+        </p>
+      }
+    </div>
+    <a class="botao botao--primario" routerLink="/admin/produtos/novo">Novo produto</a>
+  </header>
+
+  <div class="filtros" aria-label="Filtros de produtos">
+    <label class="campo filtro-busca">
+      Buscar por nome
+      <input type="search" [formControl]="busca" placeholder="Digite o nome do produto" />
+    </label>
+
+    <label class="campo">
+      Categoria
+      <select
+        [formControl]="categoriaControl"
+        (change)="alterarCategoria($any($event.target).value)"
+      >
+        <option value="">Todas as categorias</option>
+        @if (categoriasResource.isLoading() && !categoriasResource.hasValue()) {
+          <option value="" disabled>Carregando categorias...</option>
+        }
+        @for (categoria of categorias(); track categoria.id) {
+          <option [value]="categoria.id">{{ categoria.nome }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="campo">
+      Situação
+      <select [formControl]="situacaoControl" (change)="alterarSituacao($any($event.target).value)">
+        <option value="TODOS">Todos</option>
+        <option value="ATIVOS">Ativos</option>
+        <option value="INATIVOS">Inativos</option>
+      </select>
+    </label>
+  </div>
+
+  @if (categoriasResource.isLoading() && !categoriasResource.hasValue()) {
+    <p class="estado" role="status" aria-live="polite">Carregando categorias...</p>
+  } @else if (categoriasResource.error()) {
+    <div class="estado" role="alert">
+      <strong>Falha ao carregar categorias.</strong>
+      <span>{{ erroCategorias() }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarCarregarCategoriasNovamente()">
+        Tentar carregar categorias novamente
+      </button>
+    </div>
+  }
+
+  @if (feedback(); as aviso) {
+    <p [class.feedback--sucesso]="aviso.tipo === 'sucesso'" [class.feedback--erro]="aviso.tipo === 'erro'" [attr.role]="aviso.tipo === 'erro' ? 'alert' : 'status'">
+      {{ aviso.texto }}
+    </p>
+  }
+
+  @if (produtos.isLoading()) {
+    <div class="estado" role="status" aria-live="polite">Carregando produtos...</div>
+  } @else if (produtos.error()) {
+    <div class="estado" role="alert">
+      <strong>Falha ao carregar produtos.</strong>
+      <span>{{ erroCarregamento() }}</span>
+      <button class="botao botao--secundario" type="button" (click)="tentarNovamente()">
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (produtos.hasValue()) {
+    @if (paginaForaDoIntervalo()) {
+      <div class="estado" role="status" aria-live="polite">
+        <strong>A página solicitada não existe.</strong>
+        <span>Ajustando para uma página válida...</span>
+      </div>
+    } @else if (itens().length > 0) {
+      <div class="tabela-wrap">
+        <table class="tabela-produtos">
+          <thead>
+            <tr>
+              <th scope="col">Imagem</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Estoque</th>
+              <th scope="col">Situação</th>
+              <th scope="col"><span class="visually-hidden">Ações</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (produto of itens(); track produto.id) {
+              <tr>
+                <td data-label="Imagem">
+                  @if (imagemPrincipal(produto); as imagem) {
+                    <img class="imagem-produto" [src]="imagem" [alt]="produto.nome" />
+                  } @else {
+                    <span class="imagem-vazia" aria-label="Sem imagem">—</span>
+                  }
+                </td>
+                <td data-label="Nome" class="produto-nome">{{ produto.nome }}</td>
+                <td data-label="Categoria">{{ produto.categoria.nome }}</td>
+                <td data-label="Preço">{{ produto.preco | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+                <td data-label="Estoque">{{ produto.estoque }}</td>
+                <td data-label="Situação">
+                  <span class="situacao" [class.situacao--ativo]="produto.ativo" [class.situacao--inativo]="!produto.ativo">
+                    {{ produto.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+                <td data-label="Ações" class="acoes">
+                  <a class="acao-link" [routerLink]="['/admin/produtos', produto.id]">Editar</a>
+                  <button
+                    class="acao-botao"
+                    type="button"
+                    [disabled]="estaAtualizando(produto.id)"
+                    [attr.aria-label]="produto.ativo ? 'Desativar ' + produto.nome : 'Ativar ' + produto.nome"
+                    (click)="alternarAtivo(produto)"
+                  >
+                    {{ estaAtualizando(produto.id) ? 'Salvando...' : produto.ativo ? 'Desativar' : 'Ativar' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (produtos.value().totalPaginas > 1) {
+        <nav class="paginacao" aria-label="Paginação de produtos">
+          <button class="botao botao--secundario" type="button" [disabled]="pagina() <= 0" (click)="irParaPagina(pagina() - 1)">
+            Anterior
+          </button>
+          <span>Página {{ pagina() + 1 }} de {{ produtos.value().totalPaginas }}</span>
+          <button class="botao botao--secundario" type="button" [disabled]="pagina() >= produtos.value().totalPaginas - 1" (click)="irParaPagina(pagina() + 1)">
+            Próxima
+          </button>
+        </nav>
+      }
+    } @else if (produtos.value().totalItens > 0) {
+      <div class="estado" role="status">
+        <strong>Esta página não contém produtos.</strong>
+        <button class="botao botao--secundario" type="button" (click)="irParaPagina(0)">
+          Ir para a primeira página
+        </button>
+      </div>
+    } @else if (filtrosAtivos()) {
+      <div class="estado">
+        <strong>Nenhum produto encontrado para os filtros atuais.</strong>
+        <span>Altere ou limpe os filtros para tentar novamente.</span>
+      </div>
+    } @else {
+      <div class="estado">
+        <strong>Nenhum produto cadastrado.</strong>
+        <span>Quando houver produtos, eles aparecerão nesta lista.</span>
+      </div>
+    }
+  }
+</section>

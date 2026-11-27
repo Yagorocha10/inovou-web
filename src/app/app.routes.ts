@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard, visitanteGuard } from './core/guards/auth.guards';
+import { alteracoesNaoSalvasGuard } from './core/guards/alteracoes-nao-salvas.guard';
 
 export const routes: Routes = [
   {
@@ -77,8 +78,60 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [adminGuard],
-    loadComponent: () => import('./features/admin/painel/painel').then((m) => m.Painel),
-    title: 'Admin | Inovou Store',
+    loadComponent: () => import('./features/admin/layout/admin-layout').then((m) => m.AdminLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/admin/painel/painel').then((m) => m.Painel),
+        title: 'Painel administrativo | Inovou Store',
+      },
+      {
+        path: 'produtos',
+        loadComponent: () =>
+          import('./features/admin/produtos/lista-produtos-admin').then(
+            (m) => m.ListaProdutosAdmin,
+          ),
+        title: 'Produtos | Admin | Inovou Store',
+      },
+      {
+        path: 'produtos/novo',
+        loadComponent: () =>
+          import('./features/admin/produtos/novo-produto-admin').then((m) => m.NovoProdutoAdmin),
+        canDeactivate: [alteracoesNaoSalvasGuard],
+        title: 'Novo produto | Admin | Inovou Store',
+      },
+      {
+        path: 'produtos/:id',
+        loadComponent: () =>
+          import('./features/admin/produtos/editar-produto-admin').then(
+            (m) => m.EditarProdutoAdmin,
+          ),
+        canDeactivate: [alteracoesNaoSalvasGuard],
+        title: 'Produto | Admin | Inovou Store',
+      },
+      {
+        path: 'pedidos',
+        loadComponent: () =>
+          import('./features/admin/pedidos/lista-pedidos-admin').then(
+            (m) => m.ListaPedidosAdmin,
+          ),
+        title: 'Pedidos | Admin | Inovou Store',
+      },
+      {
+        path: 'pedidos/:id',
+        loadComponent: () =>
+          import('./features/admin/pedidos/detalhe-pedido-admin').then(
+            (m) => m.DetalhePedidoAdmin,
+          ),
+        title: 'Detalhe do pedido | Admin | Inovou Store',
+      },
+      {
+        path: '**',
+        loadComponent: () =>
+          import('./features/admin/nao-encontrado-admin').then((m) => m.NaoEncontradoAdmin),
+        title: 'Página não encontrada | Admin | Inovou Store',
+      },
+    ],
   },
   { path: '**', redirectTo: '' },
 ];

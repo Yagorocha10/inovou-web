@@ -1,0 +1,20 @@
+<div class="admin">
+  <aside class="admin__barra" aria-label="Navegação administrativa">
+    <a class="admin__marca" routerLink="/admin">Inovou <span>Admin</span></a>
+    <nav class="admin__nav" aria-label="Seções do painel">
+      <a routerLink="/admin" routerLinkActive="admin__link--ativo" [routerLinkActiveOptions]="{ exact: true }">Painel</a>
+      <a routerLink="/admin/produtos" routerLinkActive="admin__link--ativo">Produtos</a>
+      <a routerLink="/admin/pedidos" routerLinkActive="admin__link--ativo">Pedidos</a>
+    </nav>
+    <a class="admin__loja" routerLink="/">Voltar à loja</a>
+  </aside>
+
+  <div class="admin__principal">
+    <header class="admin__topo">
+      <span>Área administrativa</span>
+    </header>
+    <main class="admin__conteudo">
+      <router-outlet />
+    </main>
+  </div>
+</div>
