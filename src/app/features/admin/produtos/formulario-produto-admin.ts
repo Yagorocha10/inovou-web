@@ -11,6 +11,7 @@ export type FormularioProdutoAdmin = {
   nome: FormControl<string>;
   descricao: FormControl<string>;
   preco: FormControl<number | null>;
+  precoAnterior: FormControl<number | null>;
   estoque: FormControl<number | null>;
   categoriaId: FormControl<number | null>;
   ativo: FormControl<boolean>;
@@ -40,6 +41,10 @@ export function criarFormularioProdutoAdmin(
       Validators.min(0.01),
       Validators.pattern(PRECO_COM_ATE_DUAS_CASAS),
     ]),
+    precoAnterior: new FormControl<number | null>(null, [
+      Validators.min(0.01),
+      Validators.pattern(PRECO_COM_ATE_DUAS_CASAS),
+    ]),
     estoque: new FormControl<number | null>(null, [
       Validators.required,
       Validators.min(0),
@@ -48,4 +53,11 @@ export function criarFormularioProdutoAdmin(
     categoriaId: new FormControl<number | null>(null, [Validators.required, validarCategoria]),
     ativo: new FormControl(true, { nonNullable: true }),
   });
+}
+
+export function comPrecoAnterior<T extends object>(
+  dados: T,
+  precoAnterior: number | null | undefined,
+): T & { precoAnterior?: number } {
+  return precoAnterior === null || precoAnterior === undefined ? dados : { ...dados, precoAnterior };
 }

@@ -1,0 +1,29 @@
+<section class="favoritos" aria-labelledby="titulo-favoritos">
+  <div class="favoritos__cabecalho">
+    <h1 id="titulo-favoritos" class="favoritos__titulo">Meus favoritos</h1>
+    <p class="favoritos__subtitulo">
+      Os produtos que você marcou com o coração ficam guardados neste navegador.
+    </p>
+  </div>
+
+  @if (produtos.isLoading()) {
+    <div class="grade-produtos">
+      <div class="esqueleto"></div>
+      <div class="esqueleto"></div>
+      <div class="esqueleto"></div>
+      <div class="esqueleto"></div>
+    </div>
+  } @else if (produtos.value()?.length) {
+    <div class="grade-produtos">
+      @for (produto of produtos.value(); track produto.id) {
+        <app-card-produto [produto]="produto" />
+      }
+    </div>
+  } @else {
+    <div class="estado">
+      <strong>Você ainda não tem favoritos.</strong>
+      <span>Toque no coração de um produto para guardar ele aqui.</span>
+      <a routerLink="/produtos" class="botao botao--primario">Ver produtos</a>
+    </div>
+  }
+</section>

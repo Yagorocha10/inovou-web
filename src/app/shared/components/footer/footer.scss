@@ -36,6 +36,34 @@
   }
 }
 
+.footer__redes {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.footer__rede {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(246, 249, 252, 0.1);
+  color: #f6f9fc;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--inovou-blue);
+    color: #ffffff;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
 .footer__titulo {
   margin: 0 0 16px;
   font-size: 16px;

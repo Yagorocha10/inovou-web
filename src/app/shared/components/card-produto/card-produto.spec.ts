@@ -79,4 +79,56 @@ describe('CardProduto', () => {
     expect(card.querySelector('button.card__acao')).toBeNull();
     expect(card.querySelector('.card__acao--detalhes')?.textContent).toContain('Ver detalhes');
   });
+
+  it('mostra o selo de desconto, o preço riscado, o preço no Pix e a nota média', async () => {
+    const fixture = TestBed.createComponent(CardProduto);
+    fixture.componentRef.setInput('produto', {
+      ...controle,
+      preco: 149.9,
+      precoAnterior: 199.9,
+      percentualDesconto: 25,
+      precoPix: 142.4,
+      notaMedia: 4.7,
+      totalAvaliacoes: 3,
+    });
+    await fixture.whenStable();
+    const card = fixture.nativeElement as HTMLElement;
+    const texto = (seletor: string) =>
+      card.querySelector(seletor)?.textContent?.replace(/\s/g, ' ');
+
+    expect(texto('.card__selo')).toContain('-25%');
+    expect(texto('.card__preco-anterior')).toContain('R$ 199,90');
+    expect(texto('.card__pix')).toContain('ou R$ 142,40 no Pix');
+    expect(texto('.card__avaliacao')).toContain('4,7');
+    expect(texto('.card__avaliacao')).toContain('(3)');
+  });
+
+  it('sem promoção nem avaliações não inventa selo, preço riscado ou estrelas', async () => {
+    const fixture = TestBed.createComponent(CardProduto);
+    fixture.componentRef.setInput('produto', controle);
+    await fixture.whenStable();
+    const card = fixture.nativeElement as HTMLElement;
+
+    expect(card.querySelector('.card__selo--desconto')).toBeNull();
+    expect(card.querySelector('.card__preco-anterior')).toBeNull();
+    expect(card.querySelector('.card__avaliacao')).toBeNull();
+  });
+
+  it('o coração guarda e tira o produto dos favoritos', async () => {
+    const fixture = TestBed.createComponent(CardProduto);
+    fixture.componentRef.setInput('produto', controle);
+    await fixture.whenStable();
+    const coracao = (fixture.nativeElement as HTMLElement).querySelector(
+      '.card__favorito',
+    ) as HTMLButtonElement;
+
+    coracao.click();
+    await fixture.whenStable();
+    expect(coracao.getAttribute('aria-pressed')).toBe('true');
+    expect(localStorage.getItem('inovou.favoritos')).toContain('controle-ps4-sem-fio-bluetooth');
+
+    coracao.click();
+    await fixture.whenStable();
+    expect(coracao.getAttribute('aria-pressed')).toBe('false');
+  });
 });

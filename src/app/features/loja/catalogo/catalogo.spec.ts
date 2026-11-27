@@ -104,4 +104,22 @@ describe('Catalogo', () => {
     );
     expect(pagina.querySelectorAll('.filtros__link').length).toBe(1);
   });
+
+  it('filtra só as ofertas quando a URL pede', async () => {
+    const fixture = TestBed.createComponent(Catalogo);
+    fixture.componentRef.setInput('ofertas', 'true');
+    fixture.detectChanges();
+    TestBed.tick();
+
+    http.expectOne('/api/categorias').flush([]);
+    const requisicao = http.expectOne((r) => r.url === '/api/produtos');
+    expect(requisicao.request.params.get('ofertas')).toBe('true');
+    requisicao.flush({ itens: [], pagina: 0, tamanho: 12, totalItens: 0, totalPaginas: 0 });
+    await fixture.whenStable();
+
+    const pagina = fixture.nativeElement as HTMLElement;
+    expect(pagina.querySelector('h1')?.textContent).toContain('Ofertas');
+    expect(pagina.querySelector('.chips')?.textContent).toContain('Ofertas');
+    http.verify();
+  });
 });

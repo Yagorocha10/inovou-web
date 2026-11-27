@@ -1,10 +1,19 @@
 <section class="hero" aria-labelledby="titulo-hero">
-  <img class="hero__imagem" src="banners/game-stick.jpg" alt="" />
+  @if (bannerFalhou()) {
+    <img class="hero__imagem" src="banners/game-stick.jpg" alt="" />
+  } @else {
+    <img
+      class="hero__imagem"
+      src="vitrine/hero.jpg"
+      alt="Produtos de tecnologia, áudio, games e ferramentas"
+      (error)="bannerFalhou.set(true)"
+    />
+  }
   <div class="hero__degrade" aria-hidden="true"></div>
   <div class="hero__conteudo">
     <span class="selo">
       <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">bolt</mat-icon>
-      Entrega rápida em Belém
+      Novidades toda semana
     </span>
     <h1 id="titulo-hero" class="hero__titulo">
       Tecnologia, praticidade e qualidade para o seu dia a dia.
@@ -19,18 +28,27 @@
   </div>
 </section>
 
-@if (categorias.hasValue() && categorias.value().length > 0) {
+@if (categoriasDosBlocos().length > 0) {
   <section class="secao" aria-labelledby="titulo-categorias">
     <div class="secao__cabecalho">
       <h2 id="titulo-categorias" class="secao__titulo">Navegue por categorias</h2>
     </div>
     <div class="categorias">
-      @for (categoria of categorias.value(); track categoria.id) {
+      @for (categoria of categoriasDosBlocos(); track categoria.id) {
         <a routerLink="/produtos" [queryParams]="{ categoria: categoria.slug }" class="categoria">
           <span class="categoria__imagem">
-            <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">
-              {{ iconeDaCategoria(categoria.slug) }}
-            </mat-icon>
+            @if (fotosQueFalharam().has(categoria.slug)) {
+              <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">
+                {{ iconeDaCategoria(categoria.slug) }}
+              </mat-icon>
+            } @else {
+              <img
+                [src]="'vitrine/categorias/' + categoria.slug + '.jpg'"
+                [alt]="categoria.nome"
+                loading="lazy"
+                (error)="fotoFalhou(categoria.slug)"
+              />
+            }
           </span>
           <span class="categoria__nome">{{ categoria.nome }}</span>
         </a>
@@ -75,7 +93,32 @@
   }
 </section>
 
-@if (maisEmConta.hasValue() && maisEmConta.value().itens.length > 0) {
+@if (temOfertas()) {
+  <section class="secao" aria-labelledby="titulo-ofertas">
+    <div class="ofertas">
+      <div class="ofertas__cabecalho">
+        <div>
+          <span class="selo selo--vermelho">
+            <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">sell</mat-icon>
+            Ofertas
+          </span>
+          <h2 id="titulo-ofertas" class="ofertas__titulo">Ofertas que valem a pena</h2>
+          <p class="ofertas__texto">
+            Descontos de até {{ maiorDesconto() }}% em produtos selecionados.
+          </p>
+        </div>
+        <a routerLink="/produtos" [queryParams]="{ ofertas: true }" class="ofertas__link">
+          Ver todas as ofertas
+        </a>
+      </div>
+      <div class="vitrine">
+        @for (produto of ofertas.value()!.itens | slice: 0 : 4; track produto.id) {
+          <app-card-produto class="ofertas__card" [produto]="produto" />
+        }
+      </div>
+    </div>
+  </section>
+} @else if (maisEmConta.hasValue() && maisEmConta.value().itens.length > 0) {
   <section class="secao" aria-labelledby="titulo-mais-em-conta">
     <div class="ofertas">
       <div class="ofertas__cabecalho">
@@ -97,7 +140,7 @@
       </div>
       <div class="vitrine">
         @for (produto of maisEmConta.value().itens; track produto.id) {
-          <app-card-produto [produto]="produto" />
+          <app-card-produto class="ofertas__card" [produto]="produto" />
         }
       </div>
     </div>
@@ -135,17 +178,66 @@
   </div>
 </section>
 
-@if (games.hasValue() && games.value().itens.length > 0) {
+@if (maisVendidos.hasValue() && maisVendidos.value().length > 0) {
+  <section class="secao" aria-labelledby="titulo-mais-vendidos">
+    <div class="secao__cabecalho">
+      <div>
+        <h2 id="titulo-mais-vendidos" class="secao__titulo">Mais vendidos</h2>
+        <p class="secao__subtitulo">Os favoritos dos nossos clientes</p>
+      </div>
+    </div>
+    <div class="vitrine">
+      @for (produto of maisVendidos.value(); track produto.id) {
+        <app-card-produto [produto]="produto" />
+      }
+    </div>
+  </section>
+} @else if (games.hasValue() && games.value().itens.length > 0) {
   <section class="secao" aria-labelledby="titulo-games">
     <div class="secao__cabecalho">
       <div>
-        <h2 id="titulo-games" class="secao__titulo">Games e controles</h2>
+        <h2 id="titulo-games" class="secao__titulo">Games</h2>
         <p class="secao__subtitulo">Diversão para todas as idades</p>
       </div>
     </div>
     <div class="vitrine">
       @for (produto of games.value().itens; track produto.id) {
         <app-card-produto [produto]="produto" />
+      }
+    </div>
+  </section>
+}
+
+@if (depoimentos.hasValue() && depoimentos.value().length > 0) {
+  <section class="secao" aria-labelledby="titulo-depoimentos">
+    <div class="secao__cabecalho">
+      <h2 id="titulo-depoimentos" class="secao__titulo">O que nossos clientes dizem</h2>
+    </div>
+    <div class="depoimentos">
+      @for (depoimento of depoimentos.value(); track $index) {
+        <figure class="depoimento">
+          <div class="depoimento__estrelas" [attr.aria-label]="'Nota ' + depoimento.nota + ' de 5'">
+            @for (estrela of estrelas(depoimento.nota); track estrela) {
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                />
+              </svg>
+            }
+          </div>
+          <blockquote class="depoimento__texto">“{{ depoimento.comentario }}”</blockquote>
+          <figcaption class="depoimento__autor">
+            <span class="depoimento__inicial" aria-hidden="true">{{
+              depoimento.autor.charAt(0)
+            }}</span>
+            <span>
+              <b>{{ depoimento.autor }}</b>
+              <a [routerLink]="['/produtos', depoimento.produtoSlug]" class="depoimento__produto">
+                Comprou {{ depoimento.produtoNome }}
+              </a>
+            </span>
+          </figcaption>
+        </figure>
       }
     </div>
   </section>

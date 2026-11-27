@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,6 +6,9 @@ import { catchError, of } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
+import { FavoritosService } from '../../../core/services/favoritos.service';
+
+const CATEGORIAS_NO_MENU = 5;
 
 @Component({
   selector: 'app-header',
@@ -24,6 +27,12 @@ export class Header {
       .listar()
       .pipe(catchError(() => of([]))),
     { initialValue: [] },
+  );
+
+  protected readonly favoritos = inject(FavoritosService);
+
+  protected readonly categoriasDoMenu = computed(() =>
+    (this.categorias() ?? []).slice(0, CATEGORIAS_NO_MENU),
   );
 
   protected readonly menuAberto = signal(false);

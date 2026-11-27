@@ -20,6 +20,11 @@ export const routes: Routes = [
     title: 'Produto | Inovou Store',
   },
   {
+    path: 'favoritos',
+    loadComponent: () => import('./features/loja/favoritos/favoritos').then((m) => m.Favoritos),
+    title: 'Favoritos | Inovou Store',
+  },
+  {
     path: 'entrar',
     canActivate: [visitanteGuard],
     loadComponent: () => import('./features/conta/entrar/entrar').then((m) => m.Entrar),
@@ -112,17 +117,13 @@ export const routes: Routes = [
       {
         path: 'pedidos',
         loadComponent: () =>
-          import('./features/admin/pedidos/lista-pedidos-admin').then(
-            (m) => m.ListaPedidosAdmin,
-          ),
+          import('./features/admin/pedidos/lista-pedidos-admin').then((m) => m.ListaPedidosAdmin),
         title: 'Pedidos | Admin | Inovou Store',
       },
       {
         path: 'pedidos/:id',
         loadComponent: () =>
-          import('./features/admin/pedidos/detalhe-pedido-admin').then(
-            (m) => m.DetalhePedidoAdmin,
-          ),
+          import('./features/admin/pedidos/detalhe-pedido-admin').then((m) => m.DetalhePedidoAdmin),
         title: 'Detalhe do pedido | Admin | Inovou Store',
       },
       {

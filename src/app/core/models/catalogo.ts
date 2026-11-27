@@ -9,9 +9,14 @@ export interface ProdutoResumo {
   nome: string;
   slug: string;
   preco: number;
+  precoAnterior?: number | null;
+  percentualDesconto?: number;
+  precoPix?: number;
   imagemPrincipal: string | null;
   categoria: Categoria;
   disponivel: boolean;
+  notaMedia?: number | null;
+  totalAvaliacoes?: number;
 }
 
 export interface ProdutoDetalhe {
@@ -20,10 +25,15 @@ export interface ProdutoDetalhe {
   slug: string;
   descricao: string;
   preco: number;
+  precoAnterior?: number | null;
+  percentualDesconto?: number;
+  precoPix?: number;
   estoque: number;
   disponivel: boolean;
   categoria: Categoria;
   imagens: string[];
+  notaMedia?: number | null;
+  totalAvaliacoes?: number;
 }
 
 export interface Pagina<T> {
@@ -47,6 +57,35 @@ export interface FiltroProdutos {
   busca?: string;
   categoria?: string;
   ordenacao?: OrdenacaoProduto;
+  ofertas?: boolean;
   pagina?: number;
   tamanho?: number;
+}
+
+export interface Avaliacao {
+  id: number;
+  nota: number;
+  comentario: string | null;
+  autor: string;
+  criadoEm: string;
+}
+
+export interface AvaliacoesDoProduto {
+  media: number | null;
+  total: number;
+  avaliacoes: Pagina<Avaliacao>;
+}
+
+export interface PermissaoAvaliacao {
+  podeAvaliar: boolean;
+  motivo: string | null;
+}
+
+export interface Depoimento {
+  nota: number;
+  comentario: string;
+  autor: string;
+  produtoNome: string;
+  produtoSlug: string;
+  criadoEm: string;
 }

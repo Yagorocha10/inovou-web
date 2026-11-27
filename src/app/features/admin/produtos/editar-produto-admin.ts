@@ -11,7 +11,11 @@ import { DadosProduto, ImagemAdmin, ProdutoAdmin } from '../../../core/models/ad
 import { Categoria } from '../../../core/models/catalogo';
 import { AdminProdutosService } from '../../../core/services/admin-produtos.service';
 import { CategoriaService } from '../../../core/services/categoria.service';
-import { criarFormularioProdutoAdmin, FormularioProdutoAdmin } from './formulario-produto-admin';
+import {
+  comPrecoAnterior,
+  criarFormularioProdutoAdmin,
+  FormularioProdutoAdmin,
+} from './formulario-produto-admin';
 
 const TAMANHO_MAXIMO_ARQUIVO = 5 * 1024 * 1024;
 const LIMITE_IMAGENS = 8;
@@ -176,9 +180,15 @@ export class EditarProdutoAdmin implements ConfirmavelAoSair {
         : 'A descrição deve ter no máximo 2.000 caracteres.';
     }
     if (controle.hasError('min')) {
+      if (campo === 'precoAnterior') {
+        return 'O preço anterior deve ser maior que zero.';
+      }
       return campo === 'preco' ? 'O preço deve ser maior que zero.' : 'O estoque não pode ser negativo.';
     }
     if (controle.hasError('pattern')) {
+      if (campo === 'precoAnterior') {
+        return 'Informe o preço anterior com no máximo duas casas decimais.';
+      }
       return campo === 'preco'
         ? 'Informe um preço com no máximo duas casas decimais.'
         : 'O estoque deve ser um número inteiro.';
@@ -200,14 +210,17 @@ export class EditarProdutoAdmin implements ConfirmavelAoSair {
     }
     const id = this.id();
     const valores = this.formulario.getRawValue();
-    const dados: DadosProduto = {
-      nome: valores.nome.trim(),
-      descricao: valores.descricao.trim(),
-      preco: valores.preco!,
-      estoque: valores.estoque!,
-      categoriaId: valores.categoriaId!,
-      ativo: valores.ativo,
-    };
+    const dados: DadosProduto = comPrecoAnterior(
+      {
+        nome: valores.nome.trim(),
+        descricao: valores.descricao.trim(),
+        preco: valores.preco!,
+        estoque: valores.estoque!,
+        categoriaId: valores.categoriaId!,
+        ativo: valores.ativo,
+      },
+      valores.precoAnterior,
+    );
     if (id === null || !this.produto() || !this.dadosOriginais) {
       return;
     }
@@ -388,14 +401,17 @@ export class EditarProdutoAdmin implements ConfirmavelAoSair {
   }
 
   private dadosDoProduto(produto: ProdutoAdmin): DadosProduto {
-    return {
-      nome: produto.nome,
-      descricao: produto.descricao,
-      preco: produto.preco,
-      estoque: produto.estoque,
-      categoriaId: produto.categoria.id,
-      ativo: produto.ativo,
-    };
+    return comPrecoAnterior(
+      {
+        nome: produto.nome,
+        descricao: produto.descricao,
+        preco: produto.preco,
+        estoque: produto.estoque,
+        categoriaId: produto.categoria.id,
+        ativo: produto.ativo,
+      },
+      produto.precoAnterior,
+    );
   }
 
   private tipoPermitido(arquivo: File): boolean {

@@ -1,12 +1,7 @@
 export type FormaPagamento = 'PIX' | 'CARTAO' | 'NA_ENTREGA';
 
 export type StatusPedido =
-  | 'AGUARDANDO_PAGAMENTO'
-  | 'PAGO'
-  | 'EM_SEPARACAO'
-  | 'SAIU_PARA_ENTREGA'
-  | 'ENTREGUE'
-  | 'CANCELADO';
+  'AGUARDANDO_PAGAMENTO' | 'PAGO' | 'EM_SEPARACAO' | 'SAIU_PARA_ENTREGA' | 'ENTREGUE' | 'CANCELADO';
 
 export interface NovoPedido {
   enderecoId: number;
@@ -44,6 +39,8 @@ export interface ResumoCheckout {
   subtotal: number;
   frete: number;
   total: number;
+  descontoPix?: number;
+  totalPix?: number;
   prazoEntregaDias: number;
   endereco: EnderecoEntregaPedido;
 }
@@ -56,6 +53,7 @@ export interface Pedido {
   itens: ItemPedido[];
   subtotal: number;
   frete: number;
+  desconto?: number;
   total: number;
   endereco: EnderecoEntregaPedido;
   pagamento: PagamentoPedido;

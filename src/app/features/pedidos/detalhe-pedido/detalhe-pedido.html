@@ -74,6 +74,9 @@
         <h2 id="titulo-resumo" class="cartao__titulo">Resumo financeiro</h2>
         <div class="resumo-pedido__linha"><span>Subtotal</span><span>{{ atual.subtotal | currency }}</span></div>
         <div class="resumo-pedido__linha"><span>Frete</span><span>{{ atual.frete | currency }}</span></div>
+        @if (atual.desconto) {
+          <div class="resumo-pedido__linha"><span>Desconto Pix (5%)</span><span>-{{ atual.desconto | currency }}</span></div>
+        }
         <div class="resumo-pedido__linha resumo-pedido__linha--total"><strong>Total</strong><strong>{{ atual.total | currency }}</strong></div>
       </aside>
     </div>

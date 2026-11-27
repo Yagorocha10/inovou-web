@@ -15,6 +15,7 @@ export interface ProdutoAdmin {
   slug: string;
   descricao: string;
   preco: number;
+  precoAnterior?: number | null;
   estoque: number;
   ativo: boolean;
   categoria: Categoria;
@@ -25,6 +26,7 @@ export interface DadosProduto {
   nome: string;
   descricao: string;
   preco: number;
+  precoAnterior?: number | null;
   estoque: number;
   categoriaId: number;
   ativo: boolean;

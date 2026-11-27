@@ -2,7 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { provideLocalePtBr } from '../../../core/locale';
+import { AvaliacaoService } from '../../../core/services/avaliacao.service';
 import { DetalheProduto } from './detalhe-produto';
 
 const produto = {
@@ -41,6 +43,18 @@ describe('DetalheProduto', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideLocalePtBr(),
+        {
+          provide: AvaliacaoService,
+          useValue: {
+            doProduto: () =>
+              of({
+                media: null,
+                total: 0,
+                avaliacoes: { itens: [], pagina: 0, tamanho: 5, totalItens: 0, totalPaginas: 0 },
+              }),
+            permissao: () => of({ podeAvaliar: false, motivo: null }),
+          },
+        },
       ],
     }).compileComponents();
     http = TestBed.inject(HttpTestingController);

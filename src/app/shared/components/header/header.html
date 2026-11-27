@@ -1,7 +1,7 @@
 <div class="faixa-topo">
   <p class="container faixa-topo__texto">
     <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">local_shipping</mat-icon>
-    Entrega em Belém em até 2 dias · Frete de R$ 10 · Pague com Pix na hora
+    Entrega em Belém em até 2 dias · Pague na entrega · 5% off no Pix
   </p>
 </div>
 
@@ -67,6 +67,20 @@
         </a>
       }
       <a
+        routerLink="/favoritos"
+        class="acoes__icone-link"
+        [attr.aria-label]="'Favoritos, ' + favoritos.quantidade() + ' produtos'"
+      >
+        <svg class="acoes__coracao" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
+        @if (favoritos.quantidade() > 0) {
+          <span class="acoes__badge acoes__badge--favoritos">{{ favoritos.quantidade() }}</span>
+        }
+      </a>
+      <a
         routerLink="/carrinho"
         class="acoes__icone-link"
         [attr.aria-label]="'Carrinho, ' + quantidadeCarrinho() + ' itens'"
@@ -100,12 +114,7 @@
     aria-label="Categorias"
   >
     <ul class="container categorias">
-      <li>
-        <a routerLink="/produtos" class="categorias__link" (click)="menuAberto.set(false)"
-          >Todos os produtos</a
-        >
-      </li>
-      @for (categoria of categorias(); track categoria.id) {
+      @for (categoria of categoriasDoMenu(); track categoria.id) {
         <li>
           <a
             routerLink="/produtos"
@@ -120,11 +129,11 @@
       <li>
         <a
           routerLink="/produtos"
-          [queryParams]="{ ordenacao: 'MENOR_PRECO' }"
+          [queryParams]="{ ofertas: true }"
           class="categorias__link categorias__link--destaque"
           (click)="menuAberto.set(false)"
         >
-          Menores preços
+          Ofertas
         </a>
       </li>
     </ul>

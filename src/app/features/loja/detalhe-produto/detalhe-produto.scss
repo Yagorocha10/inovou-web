@@ -195,3 +195,49 @@
     white-space: pre-line;
   }
 }
+
+.info__avaliacao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--inovou-text);
+  text-decoration: none;
+
+  svg {
+    fill: var(--inovou-star);
+  }
+
+  span {
+    font-weight: 400;
+    color: var(--inovou-text-muted);
+  }
+}
+
+.compra__anterior {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--inovou-text-muted);
+}
+
+.compra__desconto {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--inovou-sale);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.compra__pix {
+  font-size: 14px;
+  color: var(--inovou-text-muted);
+
+  strong {
+    color: var(--inovou-text);
+  }
+}

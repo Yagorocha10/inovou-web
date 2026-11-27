@@ -27,6 +27,9 @@ export class Catalogo {
   readonly busca = input<string>();
   readonly categoria = input<string>();
   readonly ordenacao = input<string>();
+  readonly ofertas = input(false, {
+    transform: (valor: unknown) => valor === true || valor === 'true',
+  });
   readonly pagina = input(0, { transform: paraNumeroDePagina });
 
   protected readonly ordenacoes = ORDENACOES;
@@ -43,6 +46,7 @@ export class Catalogo {
     busca: this.busca()?.trim() ?? '',
     categoria: this.categoria() ?? '',
     ordenacao: this.ordenacaoAtual(),
+    ofertas: this.ofertas() || undefined,
     pagina: this.pagina(),
     tamanho: TAMANHO_PAGINA,
   }));
@@ -71,6 +75,9 @@ export class Catalogo {
     const busca = this.filtro().busca;
     if (busca) {
       return `Resultados para “${busca}”`;
+    }
+    if (this.ofertas() && !this.categoriaAtual()) {
+      return 'Ofertas';
     }
     return this.categoriaAtual()?.nome ?? 'Todos os produtos';
   });

@@ -55,9 +55,36 @@
     <section class="info">
       <span class="info__categoria">{{ item.categoria.nome }}</span>
       <h1 class="info__nome">{{ item.nome }}</h1>
+      @if (item.totalAvaliacoes && item.notaMedia) {
+        <a href="#avaliacoes" class="info__avaliacao" (click)="irParaAvaliacoes($event)">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+            />
+          </svg>
+          {{ item.notaMedia | number: '1.1-1' }}
+          <span
+            >({{ item.totalAvaliacoes }}
+            {{ item.totalAvaliacoes === 1 ? 'avaliação' : 'avaliações' }})</span
+          >
+        </a>
+      }
 
       <div class="compra">
+        @if (item.precoAnterior; as precoAnterior) {
+          <span class="compra__anterior">
+            <span class="visually-hidden">De </span><s>{{ precoAnterior | currency }}</s>
+            @if (item.percentualDesconto) {
+              <span class="compra__desconto">-{{ item.percentualDesconto }}%</span>
+            }
+          </span>
+        }
         <span class="compra__preco">{{ item.preco | currency }}</span>
+        @if (item.precoPix; as precoPix) {
+          <span class="compra__pix"
+            >ou <strong>{{ precoPix | currency }}</strong> no Pix (5% de desconto)</span
+          >
+        }
         @if (item.disponivel) {
           <span class="compra__estoque">
             <span class="compra__ponto"></span>
@@ -116,4 +143,6 @@
       }
     </section>
   </div>
+
+  <app-avaliacoes-produto [slug]="item.slug" />
 }

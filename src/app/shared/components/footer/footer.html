@@ -8,6 +8,17 @@
         Tecnologia, praticidade e qualidade para o seu dia a dia. Produtos selecionados com ótimos
         preços e atendimento de verdade.
       </p>
+      <div class="footer__redes">
+        <a
+          class="footer__rede"
+          href="https://wa.me/559187226520"
+          target="_blank"
+          rel="noopener"
+          aria-label="WhatsApp da Inovou Store"
+        >
+          <mat-icon fontSet="material-symbols-outlined" aria-hidden="true">chat</mat-icon>
+        </a>
+      </div>
     </div>
 
     <div>
@@ -16,23 +27,15 @@
         <li>
           <a routerLink="/produtos" [queryParams]="{ categoria: 'eletronicos' }">Eletrônicos</a>
         </li>
-        <li>
-          <a routerLink="/produtos" [queryParams]="{ categoria: 'games-e-controles' }"
-            >Games e controles</a
-          >
-        </li>
-        <li>
-          <a routerLink="/produtos" [queryParams]="{ categoria: 'carregadores-e-cabos' }"
-            >Carregadores e cabos</a
-          >
-        </li>
+        <li><a routerLink="/produtos" [queryParams]="{ categoria: 'games' }">Games</a></li>
         <li>
           <a routerLink="/produtos" [queryParams]="{ categoria: 'ferramentas' }">Ferramentas</a>
         </li>
-        <li><a routerLink="/produtos" [queryParams]="{ categoria: 'relogios' }">Relógios</a></li>
         <li>
-          <a routerLink="/produtos" [queryParams]="{ ordenacao: 'MENOR_PRECO' }">Menores preços</a>
+          <a routerLink="/produtos" [queryParams]="{ categoria: 'acessorios' }">Acessórios</a>
         </li>
+        <li><a routerLink="/produtos" [queryParams]="{ categoria: 'audio' }">Áudio</a></li>
+        <li><a routerLink="/produtos" [queryParams]="{ ofertas: true }">Ofertas</a></li>
       </ul>
     </div>
 
@@ -50,7 +53,7 @@
           Entregas em Belém e região metropolitana
         </li>
         <li><a routerLink="/pedidos">Meus pedidos</a></li>
-        <li><a routerLink="/conta">Minha conta</a></li>
+        <li><a routerLink="/favoritos">Meus favoritos</a></li>
       </ul>
     </div>
 
@@ -58,10 +61,11 @@
       <h2 class="footer__titulo">Pagamento</h2>
       <div class="footer__pagamentos" aria-label="Formas de pagamento">
         <span class="footer__pagamento">Pix</span>
-        <span class="footer__pagamento">Cartão</span>
-        <span class="footer__pagamento">Na entrega</span>
+        <span class="footer__pagamento">Visa</span>
+        <span class="footer__pagamento">Mastercard</span>
+        <span class="footer__pagamento">Elo</span>
       </div>
-      <p class="footer__nota">Pague com Pix pelo QR Code ou copia e cola na hora da compra.</p>
+      <p class="footer__nota">5% de desconto pagando no Pix.</p>
     </div>
   </div>
 

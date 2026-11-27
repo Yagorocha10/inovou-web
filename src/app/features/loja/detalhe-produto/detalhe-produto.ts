@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -10,12 +10,13 @@ import { mensagemDeErro } from '../../../core/erro-api';
 import { AuthService } from '../../../core/services/auth.service';
 import { CarrinhoService } from '../../../core/services/carrinho.service';
 import { ProdutoService } from '../../../core/services/produto.service';
+import { AvaliacoesProduto } from './avaliacoes-produto/avaliacoes-produto';
 
 const WHATSAPP_LOJA = '559187226520';
 
 @Component({
   selector: 'app-detalhe-produto',
-  imports: [RouterLink, CurrencyPipe, MatIconModule],
+  imports: [RouterLink, CurrencyPipe, DecimalPipe, MatIconModule, AvaliacoesProduto],
   templateUrl: './detalhe-produto.html',
   styleUrl: './detalhe-produto.scss',
 })
@@ -60,6 +61,11 @@ export class DetalheProduto {
         this.quantidade.set(1);
       }
     });
+  }
+
+  protected irParaAvaliacoes(evento: Event): void {
+    evento.preventDefault();
+    document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   protected alterarQuantidade(delta: number): void {

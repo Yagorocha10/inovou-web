@@ -76,6 +76,18 @@
           </label>
 
           <label class="campo">
+            <span>Preço anterior (R$), opcional</span>
+            <input type="number" formControlName="precoAnterior" min="0.01" step="0.01" />
+            @if (campoInvalido('precoAnterior')) {
+              <small class="campo__erro">{{ erroDoCampo('precoAnterior') }}</small>
+            } @else if (erroServidor('precoAnterior'); as mensagem) {
+              <small class="campo__erro">{{ mensagem }}</small>
+            } @else {
+              <small class="campo__dica">Preencha só se o produto estiver em promoção. O site mostra o preço riscado e o desconto.</small>
+            }
+          </label>
+
+          <label class="campo">
             <span>Estoque</span>
             <input type="number" formControlName="estoque" min="0" step="1" />
             @if (campoInvalido('estoque')) {

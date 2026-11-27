@@ -1,0 +1,113 @@
+<section id="avaliacoes" class="avaliacoes" aria-labelledby="titulo-avaliacoes">
+  <div class="avaliacoes__cabecalho">
+    <h2 id="titulo-avaliacoes" class="avaliacoes__titulo">Avaliações</h2>
+    @if (avaliacoes.hasValue() && avaliacoes.value().total > 0) {
+      <p class="avaliacoes__resumo">
+        <span class="avaliacoes__media">{{ avaliacoes.value().media | number: '1.1-1' }}</span>
+        <span
+          class="avaliacoes__estrelas"
+          [attr.aria-label]="'Nota média ' + avaliacoes.value().media + ' de 5'"
+        >
+          @for (estrela of estrelas(avaliacoes.value().media ?? 0); track estrela) {
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+              />
+            </svg>
+          }
+        </span>
+        <span>
+          {{ avaliacoes.value().total }}
+          {{ avaliacoes.value().total === 1 ? 'avaliação' : 'avaliações' }}
+        </span>
+      </p>
+    }
+  </div>
+
+  @if (enviada()) {
+    <p class="avaliacoes__aviso" role="status">
+      Obrigado! Sua avaliação já aparece para os outros clientes.
+    </p>
+  }
+
+  @if (permissao.hasValue() && permissao.value().podeAvaliar) {
+    <form class="avaliar" [formGroup]="formulario" (ngSubmit)="enviar()">
+      <fieldset class="avaliar__nota">
+        <legend>Sua nota</legend>
+        <div class="avaliar__estrelas" role="radiogroup" aria-label="Sua nota de 1 a 5 estrelas">
+          @for (nota of opcoesDeNota; track nota) {
+            <button
+              type="button"
+              role="radio"
+              class="avaliar__estrela"
+              [class.avaliar__estrela--ativa]="(formulario.controls.nota.value ?? 0) >= nota"
+              [attr.aria-checked]="formulario.controls.nota.value === nota"
+              [attr.aria-label]="nota + (nota === 1 ? ' estrela' : ' estrelas')"
+              (click)="escolherNota(nota)"
+            >
+              <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                <path
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                />
+              </svg>
+            </button>
+          }
+        </div>
+        @if (formulario.controls.nota.touched && formulario.controls.nota.invalid) {
+          <small class="campo__erro">Escolha uma nota de 1 a 5 estrelas.</small>
+        }
+      </fieldset>
+      <label class="avaliar__comentario">
+        <span>Comentário (opcional)</span>
+        <textarea
+          formControlName="comentario"
+          rows="3"
+          maxlength="1000"
+          placeholder="Conte o que achou do produto e da entrega"
+        ></textarea>
+      </label>
+      @if (erro(); as mensagem) {
+        <small class="campo__erro" role="alert">{{ mensagem }}</small>
+      }
+      <button type="submit" class="botao botao--primario" [disabled]="enviando()">
+        {{ enviando() ? 'Enviando...' : 'Enviar avaliação' }}
+      </button>
+    </form>
+  } @else if (!auth.logado()) {
+    <p class="avaliacoes__dica">
+      Comprou este produto? <a routerLink="/entrar">Entre na sua conta</a> para avaliar depois de
+      receber.
+    </p>
+  } @else if (permissao.hasValue() && permissao.value().motivo && !enviada()) {
+    <p class="avaliacoes__dica">{{ permissao.value().motivo }}</p>
+  }
+
+  @if (avaliacoes.hasValue()) {
+    @if (avaliacoes.value().avaliacoes.itens.length > 0) {
+      <ul class="lista">
+        @for (avaliacao of avaliacoes.value().avaliacoes.itens; track avaliacao.id) {
+          <li class="lista__item">
+            <div class="lista__topo">
+              <span class="lista__estrelas" [attr.aria-label]="'Nota ' + avaliacao.nota + ' de 5'">
+                @for (estrela of estrelas(avaliacao.nota); track estrela) {
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path
+                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                    />
+                  </svg>
+                }
+              </span>
+              <b>{{ avaliacao.autor }}</b>
+              <span class="lista__data">{{ avaliacao.criadoEm | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            @if (avaliacao.comentario) {
+              <p class="lista__comentario">{{ avaliacao.comentario }}</p>
+            }
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="avaliacoes__vazio">Este produto ainda não tem avaliações.</p>
+    }
+  }
+</section>

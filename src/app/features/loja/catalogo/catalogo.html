@@ -42,6 +42,11 @@
             Busca: {{ filtro().busca }} ✕
           </button>
         }
+        @if (ofertas()) {
+          <button type="button" class="chip" (click)="navegar({ ofertas: null, pagina: null })">
+            Ofertas ✕
+          </button>
+        }
         @if (categoriaAtual(); as atual) {
           <button type="button" class="chip" (click)="navegar({ categoria: null, pagina: null })">
             {{ atual.nome }} ✕

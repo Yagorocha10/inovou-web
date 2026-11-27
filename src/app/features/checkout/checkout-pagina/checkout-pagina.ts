@@ -168,6 +168,14 @@ export class CheckoutPagina implements OnInit, OnDestroy {
     this.formaPagamento.set(forma);
   }
 
+  protected descontoPixDo(resumo: ResumoCheckout): number {
+    return this.formaPagamento() === 'PIX' ? (resumo.descontoPix ?? 0) : 0;
+  }
+
+  protected totalDoPedido(resumo: ResumoCheckout): number {
+    return this.formaPagamento() === 'PIX' && resumo.totalPix != null ? resumo.totalPix : resumo.total;
+  }
+
   protected novoEndereco(): void {
     this.invalidarResumoPendente();
     this.resumo.set(null);

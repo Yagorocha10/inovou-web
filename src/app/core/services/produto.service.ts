@@ -27,4 +27,10 @@ export class ProdutoService {
       params: { limite },
     });
   }
+
+  maisVendidos(limite = 4): Observable<ProdutoResumo[]> {
+    return this.http.get<ProdutoResumo[]>(`${this.url}/mais-vendidos`, {
+      params: { limite },
+    });
+  }
 }

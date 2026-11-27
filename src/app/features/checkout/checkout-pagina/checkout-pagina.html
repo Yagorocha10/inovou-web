@@ -219,7 +219,7 @@
             <legend class="visually-hidden">Selecione uma forma de pagamento</legend>
             <label class="pagamento-opcao" [class.pagamento-opcao--selecionada]="formaPagamento() === 'PIX'">
               <input type="radio" name="formaPagamento" value="PIX" [checked]="formaPagamento() === 'PIX'" (change)="selecionarFormaPagamento('PIX')" />
-              <span><strong>Pix</strong><small>Pagamento via código Pix simulado.</small></span>
+              <span><strong>Pix</strong><small>QR Code ou copia e cola, com 5% de desconto nos produtos.</small></span>
             </label>
             <label class="pagamento-opcao" [class.pagamento-opcao--selecionada]="formaPagamento() === 'CARTAO'">
               <input type="radio" name="formaPagamento" value="CARTAO" [checked]="formaPagamento() === 'CARTAO'" (change)="selecionarFormaPagamento('CARTAO')" />
@@ -233,8 +233,11 @@
 
           <div class="total-pagamento">
             <span>Total do pedido</span>
-            <strong>{{ atual.total | currency }}</strong>
+            <strong>{{ totalDoPedido(atual) | currency }}</strong>
           </div>
+          @if (descontoPixDo(atual) > 0) {
+            <p class="desconto-pix">Você economiza {{ descontoPixDo(atual) | currency }} pagando no Pix.</p>
+          }
 
           <div class="etapa-conteudo__acoes etapa-conteudo__acoes--entre">
             <button type="button" class="botao botao--secundario" (click)="voltarParaRevisao()">Voltar à revisão</button>
@@ -251,7 +254,10 @@
       @if (resumo(); as atual) {
         <div class="resumo-lateral__linha"><span>Subtotal</span><span>{{ atual.subtotal | currency }}</span></div>
         <div class="resumo-lateral__linha"><span>Frete</span><span>{{ atual.frete | currency }}</span></div>
-        <div class="resumo-lateral__linha resumo-lateral__linha--total"><span>Total</span><strong>{{ atual.total | currency }}</strong></div>
+        @if (descontoPixDo(atual) > 0) {
+          <div class="resumo-lateral__linha resumo-lateral__linha--desconto"><span>Desconto Pix (5%)</span><span>-{{ descontoPixDo(atual) | currency }}</span></div>
+        }
+        <div class="resumo-lateral__linha resumo-lateral__linha--total"><span>Total</span><strong>{{ totalDoPedido(atual) | currency }}</strong></div>
         <p class="prazo">Prazo estimado: {{ atual.prazoEntregaDias }} {{ atual.prazoEntregaDias === 1 ? 'dia' : 'dias' }}</p>
       } @else if (statusCarrinho() === 'success' && carrinho(); as atualCarrinho) {
         <div class="resumo-lateral__linha"><span>Subtotal</span><span>{{ atualCarrinho.subtotal | currency }}</span></div>
